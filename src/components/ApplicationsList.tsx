@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type TApplicationObject = {
+  id: number;
   company: string;
   position: string;
   date_applied: string;
@@ -13,6 +15,7 @@ type TApplicationData = TApplicationObject[];
 
 const data = [
   {
+    id: 1,
     company: "Vanilla",
     position: "Secretary",
     date_applied: "01/01/2025",
@@ -21,6 +24,7 @@ const data = [
     listing_url: "https://uk.indeed.com/viewjob?jk=4d26b053ab1cb8b8",
   },
   {
+    id: 2,
     company: "Coconut LTD",
     position: "Fireman",
     date_applied: "15/01/2025",
@@ -29,6 +33,7 @@ const data = [
     listing_url: "https://www.linkedin.com/jobs/view/4234131197",
   },
   {
+    id: 3,
     company: "Flower Arrangement Society",
     position: "Florist",
     date_applied: "15/03/2025",
@@ -41,8 +46,10 @@ const data = [
 const statuses = ["Application sent", "In review", "Rejected", "Archived"];
 
 function ApplicationsList() {
+  const navigate = useNavigate();
   const [applicationsData, setApplicationsData] =
     useState<TApplicationData>(data);
+
   return (
     <section>
       <h2>History</h2>
@@ -70,7 +77,13 @@ function ApplicationsList() {
           {applicationsData.map((application, i) => {
             return (
               <tr key={i}>
-                <td>{application.company}</td>
+                <td
+                  onClick={() => {
+                    navigate(`/applications/${application.id}`);
+                  }}
+                >
+                  {application.company}
+                </td>
                 <td>{application.position}</td>
                 <td>{application.date_applied}</td>
                 <td>
