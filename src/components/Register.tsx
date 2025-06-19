@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { registerNewUser } from "../api";
 import { processServerError } from "../utils/erros";
+import { validatePassword } from "../utils/validators";
 
 type TUserData = { name: string; email: string; password: string };
 
@@ -15,6 +16,7 @@ function Register() {
   });
   const [missingData, setMissingData] = useState<boolean>(false);
   const [serverError, setServerError] = useState<any>(null);
+  const [invalidPassword, setInvalidPassword] = useState<boolean>(false);
 
   function handleDataInput(value: string, key: "name" | "email" | "password") {
     setMissingData(false);
@@ -25,7 +27,11 @@ function Register() {
 
   async function registerUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (userData.name && userData.email && userData.password) {
+    if (
+      userData.name &&
+      userData.email &&
+      validatePassword(userData.password)
+    ) {
       try {
         await registerNewUser(userData);
         navigate("/login");
@@ -35,8 +41,10 @@ function Register() {
           setUserData({ name: "", email: "", password: "" });
         }
       }
-    } else {
+    } else if (!userData.email || !userData.name || !userData.password) {
       setMissingData(true);
+    } else {
+      setInvalidPassword(true);
     }
   }
 
@@ -70,9 +78,13 @@ function Register() {
           id="password"
           value={userData.password}
           onChange={(event) => {
+            setInvalidPassword(false);
             handleDataInput(event.target.value, "password");
           }}
         />
+        {invalidPassword && (
+          <p>The password must contain at least 8 characters and no spaces</p>
+        )}
         <br />
         {missingData && <p>Please fill in all the fields</p>}
         {serverError?.unknownError && (
