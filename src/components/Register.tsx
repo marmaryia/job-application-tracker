@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { registerNewUser } from "../api";
+import { processServerError } from "../utils/erros";
 
 type TUserData = { name: string; email: string; password: string };
 
@@ -13,6 +14,7 @@ function Register() {
     password: "",
   });
   const [missingData, setMissingData] = useState<boolean>(false);
+  const [serverError, setServerError] = useState<any>(null);
 
   function handleDataInput(value: string, key: "name" | "email" | "password") {
     setMissingData(false);
@@ -27,8 +29,11 @@ function Register() {
       try {
         await registerNewUser(userData);
         navigate("/login");
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        setServerError(processServerError(error));
+        if (serverError?.unknownError) {
+          setUserData({ name: "", email: "", password: "" });
+        }
       }
     } else {
       setMissingData(true);
@@ -57,6 +62,7 @@ function Register() {
             handleDataInput(event.target.value, "email");
           }}
         />
+        {serverError?.duplicateUser && <p>{serverError.message}</p>}
         <br />
         <label htmlFor="password">Password</label>
         <input
@@ -69,6 +75,9 @@ function Register() {
         />
         <br />
         {missingData && <p>Please fill in all the fields</p>}
+        {serverError?.unknownError && (
+          <p>Something has gone wrong, please try again</p>
+        )}
         <button type="submit">Sign up</button>
       </form>
     </section>
