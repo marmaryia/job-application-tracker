@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import type { TUserDetails } from "../types/userTypes";
 import { loginUser } from "../api";
 import { UserContext } from "../contexts/userContext";
+import { processLoggingInError } from "../utils/errors";
 
 function Login() {
   const [userDetails, setUserDetails] = useState<TUserDetails>({
@@ -9,6 +10,7 @@ function Login() {
     password: "",
   });
   const { setLoggedInUser } = useContext(UserContext);
+  const [loggingInError, setLoggingInError] = useState<any>(null);
 
   function handleDataInput(value: string, key: "email" | "password") {
     setUserDetails((current) => {
@@ -21,14 +23,16 @@ function Login() {
     if (userDetails.email && userDetails.password) {
       try {
         const user = await loginUser(userDetails);
-
         setLoggedInUser({ ...user.user, accessToken: user.access_token });
-      } catch {}
+      } catch (error: any) {
+        setLoggingInError(processLoggingInError(error));
+      }
     }
   }
 
   return (
     <section>
+      {loggingInError?.authenticationError && <p>{loggingInError.message}</p>}
       <form action="submit" onSubmit={handleSubmit}>
         <label htmlFor="email">Email address</label>
         <input
@@ -50,6 +54,7 @@ function Login() {
           }}
         />
         <br />
+        {loggingInError?.unknownError && <p>{loggingInError.message}</p>}
         <button>Log in</button>
       </form>
     </section>

@@ -11,3 +11,17 @@ export function processServerError(error: any) {
     };
   }
 }
+
+export function processLoggingInError(error: any) {
+  if (error.status === 401)
+    return {
+      authenticationError: true,
+      message: "Incorrect email address or password",
+    };
+  else {
+    return {
+      unknownError: true,
+      message: "Something has gone wrong, please try again",
+    };
+  }
+}

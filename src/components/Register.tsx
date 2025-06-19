@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { registerNewUser } from "../api";
-import { processServerError } from "../utils/erros";
+import { processServerError } from "../utils/errors";
 import { validatePassword } from "../utils/validators";
 import type { TNewUserDetails } from "../types/userTypes";
 
