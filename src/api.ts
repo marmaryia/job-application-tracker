@@ -18,5 +18,15 @@ export async function registerNewUser({
   password: string;
 }) {
   await api.post("auth/register", { name, email, password });
-  console.log("registered");
+}
+
+export async function loginUser({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
+  const { data } = await api.post("auth/login", { email, password });
+  return data;
 }

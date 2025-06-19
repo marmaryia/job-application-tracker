@@ -4,12 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { registerNewUser } from "../api";
 import { processServerError } from "../utils/erros";
 import { validatePassword } from "../utils/validators";
-
-type TUserData = { name: string; email: string; password: string };
+import type { TNewUserDetails } from "../types/userTypes";
 
 function Register() {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState<TUserData>({
+  const [userData, setUserData] = useState<TNewUserDetails>({
     name: "",
     email: "",
     password: "",
