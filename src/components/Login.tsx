@@ -3,14 +3,19 @@ import type { TUserDetails } from "../types/userTypes";
 import { loginUser } from "../api";
 import { UserContext } from "../contexts/userContext";
 import { processLoggingInError } from "../utils/errors";
+import { Navigate } from "react-router-dom";
 
 function Login() {
   const [userDetails, setUserDetails] = useState<TUserDetails>({
     email: "",
     password: "",
   });
-  const { setLoggedInUser } = useContext(UserContext);
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
   const [loggingInError, setLoggingInError] = useState<any>(null);
+
+  if (loggedInUser) {
+    return <Navigate to="/applications" />;
+  }
 
   function handleDataInput(value: string, key: "email" | "password") {
     setUserDetails((current) => {

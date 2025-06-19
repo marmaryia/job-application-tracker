@@ -11,5 +11,5 @@ export interface TLoggedInUser {
   name: string;
   email: string;
   id: number;
-  access_token: string;
+  accessToken: string;
 }

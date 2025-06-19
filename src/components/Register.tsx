@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 
 import { registerNewUser } from "../api";
 import { processServerError } from "../utils/errors";
 import { validatePassword } from "../utils/validators";
 import type { TNewUserDetails } from "../types/userTypes";
+import { UserContext } from "../contexts/userContext";
 
 function Register() {
   const navigate = useNavigate();
@@ -16,6 +17,11 @@ function Register() {
   const [missingData, setMissingData] = useState<boolean>(false);
   const [serverError, setServerError] = useState<any>(null);
   const [invalidPassword, setInvalidPassword] = useState<boolean>(false);
+  const { loggedInUser } = useContext(UserContext);
+
+  if (loggedInUser) {
+    return <Navigate to="/applications" />;
+  }
 
   function handleDataInput(value: string, key: "name" | "email" | "password") {
     setMissingData(false);
