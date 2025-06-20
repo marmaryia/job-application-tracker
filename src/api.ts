@@ -48,11 +48,17 @@ export async function logoutUser(accessToken: string) {
 
 export async function getApplicationsByUserId(
   accessToken: string,
-  userId: number
+  userId: number,
+  sortBy: string | null,
+  order: string | null
 ) {
+  const url = `users/${userId}/applications?sort_by=${
+    sortBy ? sortBy : "date_created"
+  }&order=${order ? order : "desc"}`;
+
   const {
     data: { applications },
-  } = await api.get(`users/${userId}/applications`, {
+  } = await api.get(url, {
     headers: {
       ...api.defaults.headers.common,
       Authorization: `Bearer ${accessToken}`,

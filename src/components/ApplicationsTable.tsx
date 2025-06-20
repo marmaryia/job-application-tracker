@@ -5,7 +5,13 @@ import { UserContext } from "../contexts/userContext";
 import { getApplicationsByUserId } from "../api";
 import ApplicationsTableRow from "./ApplicationsTableRow";
 
-function ApplicationsTable() {
+function ApplicationsTable({
+  sortBy,
+  order,
+}: {
+  sortBy: string | null;
+  order: string | null;
+}) {
   const { loggedInUser } = useContext(UserContext);
   const [applicationsData, setApplicationsData] = useState<TApplication[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -17,7 +23,9 @@ function ApplicationsTable() {
     try {
       const applications = await getApplicationsByUserId(
         loggedInUser!.accessToken,
-        loggedInUser!.id
+        loggedInUser!.id,
+        sortBy,
+        order
       );
       setApplicationsData(applications);
     } catch {
@@ -29,7 +37,7 @@ function ApplicationsTable() {
 
   useEffect(() => {
     getApplications();
-  }, []);
+  }, [sortBy, order]);
 
   if (error) return <p>There has been an error</p>;
   if (isLoading) return <p>Fetching data</p>;
