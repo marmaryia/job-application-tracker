@@ -66,6 +66,7 @@ function ApplicationsTable({
               application={application}
               key={application.application_id}
               serialId={i + 1}
+              setError={setError}
             />
           );
         })}
