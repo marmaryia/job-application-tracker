@@ -45,3 +45,26 @@ export async function logoutUser(accessToken: string) {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 }
+
+export async function getApplicationsByUserId(
+  accessToken: string,
+  userId: number,
+  sortBy: string | null,
+  order: string | null,
+  status: string | null
+) {
+  const url = `users/${userId}/applications?sort_by=${
+    sortBy ? sortBy : "date_created"
+  }&order=${order ? order : "desc"}&status=${status}`;
+
+  const {
+    data: { applications },
+  } = await api.get(url, {
+    headers: {
+      ...api.defaults.headers.common,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  return applications;
+}

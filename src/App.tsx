@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 
 import Header from "./components/Header";
-import ApplicationsList from "./components/ApplicationsList";
+import ApplicationsList from "./components/ApplicationsListPage";
 import ApplicationPage from "./components/ApplicationPage";
 import Register from "./components/Register";
 import Login from "./components/Login";
