@@ -14,20 +14,11 @@ function ApplicationsList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const sortByQuery = searchParams.get("sort_by");
   const orderQuery = searchParams.get("order");
+  const statusQuery = searchParams.get("status");
 
-  function setSortingQuery(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) {
+  function setQuery(queryName: string, value: string) {
     const newParams = new URLSearchParams(searchParams);
-    newParams.set("sort_by", event.currentTarget.value);
-    setSearchParams(newParams);
-  }
-
-  function setOrderQuery(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) {
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set("order", event.currentTarget.value);
+    newParams.set(queryName, value);
     setSearchParams(newParams);
   }
 
@@ -35,16 +26,41 @@ function ApplicationsList() {
     <section>
       <h2>History</h2>
       <div>
-        <button>Filter by status</button>
-        <button value="date_created" onClick={setSortingQuery}>
+        <select
+          name="statuses"
+          id="statuses"
+          value={statusQuery ? statusQuery : "All"}
+          onChange={(event) => {
+            setQuery("status", event.target.value);
+          }}
+        >
+          <option value="" disabled></option>
+          <option value="">All</option>
+          <option value="active">Active</option>
+          <option value="rejected">Rejected</option>
+          <option value="archived">Archived</option>
+        </select>
+        <button
+          value="date_created"
+          onClick={(event) => {
+            setQuery("sort_by", event.currentTarget.value);
+          }}
+        >
           Sort by application date
         </button>
-        <button value="recent_activity" onClick={setSortingQuery}>
+        <button
+          value="recent_activity"
+          onClick={(event) => {
+            setQuery("sort_by", event.currentTarget.value);
+          }}
+        >
           Sort by last activity date
         </button>
         <button
           value={orderQuery === "asc" ? "desc" : "asc"}
-          onClick={setOrderQuery}
+          onClick={(event) => {
+            setQuery("order", event.currentTarget.value);
+          }}
         >
           {orderQuery === "desc" || !orderQuery ? "Oldest" : "Newest"} first
         </button>
@@ -52,7 +68,11 @@ function ApplicationsList() {
         <button>Search by company</button>
         <button>New application</button>
       </div>
-      <ApplicationsTable sortBy={sortByQuery} order={orderQuery} />
+      <ApplicationsTable
+        sortBy={sortByQuery}
+        order={orderQuery}
+        status={statusQuery}
+      />
     </section>
   );
 }

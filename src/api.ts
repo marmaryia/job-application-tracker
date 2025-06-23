@@ -50,11 +50,12 @@ export async function getApplicationsByUserId(
   accessToken: string,
   userId: number,
   sortBy: string | null,
-  order: string | null
+  order: string | null,
+  status: string | null
 ) {
   const url = `users/${userId}/applications?sort_by=${
     sortBy ? sortBy : "date_created"
-  }&order=${order ? order : "desc"}`;
+  }&order=${order ? order : "desc"}&status=${status}`;
 
   const {
     data: { applications },

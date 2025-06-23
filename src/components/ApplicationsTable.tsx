@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import type { TApplication } from "../types/applicationTypes";
 import { UserContext } from "../contexts/userContext";
@@ -8,9 +7,11 @@ import ApplicationsTableRow from "./ApplicationsTableRow";
 function ApplicationsTable({
   sortBy,
   order,
+  status,
 }: {
   sortBy: string | null;
   order: string | null;
+  status: string | null;
 }) {
   const { loggedInUser } = useContext(UserContext);
   const [applicationsData, setApplicationsData] = useState<TApplication[]>([]);
@@ -25,7 +26,8 @@ function ApplicationsTable({
         loggedInUser!.accessToken,
         loggedInUser!.id,
         sortBy,
-        order
+        order,
+        status
       );
       setApplicationsData(applications);
     } catch {
@@ -37,7 +39,7 @@ function ApplicationsTable({
 
   useEffect(() => {
     getApplications();
-  }, [sortBy, order]);
+  }, [sortBy, order, status]);
 
   if (error) return <p>There has been an error</p>;
   if (isLoading) return <p>Fetching data</p>;
