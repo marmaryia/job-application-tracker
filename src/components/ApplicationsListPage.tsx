@@ -64,8 +64,8 @@ function ApplicationsList() {
         >
           {orderQuery === "desc" || !orderQuery ? "Oldest" : "Newest"} first
         </button>
-        <input type="text" placeholder="Company name" />
-        <button>Search by company</button>
+        <input type="text" placeholder="Company name or position" />
+        <button>Search</button>
         <button>New application</button>
       </div>
       <ApplicationsTable

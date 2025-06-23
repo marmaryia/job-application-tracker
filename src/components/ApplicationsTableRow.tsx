@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import type { TApplication } from "../types/applicationTypes";
 import { getDateFromIsoTimestamp } from "../utils/dates";
 import { patchApplicationStatus } from "../api";
@@ -28,6 +28,8 @@ function ApplicationsTableRow({
   const { loggedInUser } = useContext(UserContext);
   const [updatedApplication, setUpdatedApplication] =
     useState<TApplication>(application);
+  const [editingStatus, setEditingStatus] = useState<boolean>(false);
+  const selectRef = useRef<HTMLSelectElement>(null);
 
   async function changeStatus(event: React.ChangeEvent<HTMLSelectElement>) {
     try {
@@ -45,6 +47,12 @@ function ApplicationsTableRow({
     }
   }
 
+  useEffect(() => {
+    if (editingStatus && selectRef.current) {
+      selectRef.current.focus();
+    }
+  }, [editingStatus]);
+
   return (
     <tr>
       <td>{serialId}</td>
@@ -57,22 +65,28 @@ function ApplicationsTableRow({
       </td>
       <td>{updatedApplication.position}</td>
       <td>{getDateFromIsoTimestamp(updatedApplication.date_created)}</td>
-      <td>
-        <select
-          name="statuses"
-          id="statuses"
-          value={updatedApplication.status}
-          onChange={changeStatus}
-        >
-          <option value="" disabled></option>
-          {statuses.map((appStatus, i) => {
-            return (
-              <option key={i} value={appStatus}>
-                {appStatus}
-              </option>
-            );
-          })}
-        </select>
+      <td onClick={() => setEditingStatus(true)}>
+        {editingStatus ? (
+          <select
+            name="statuses"
+            id="statuses"
+            ref={selectRef}
+            value={updatedApplication.status}
+            onChange={changeStatus}
+            onBlur={() => setEditingStatus(false)}
+          >
+            <option value="" disabled></option>
+            {statuses.map((appStatus, i) => {
+              return (
+                <option key={i} value={appStatus}>
+                  {appStatus}
+                </option>
+              );
+            })}
+          </select>
+        ) : (
+          updatedApplication.status
+        )}
       </td>
       <td>
         {getDateFromIsoTimestamp(updatedApplication.latest_event.date)}:{" "}
