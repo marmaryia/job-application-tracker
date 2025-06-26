@@ -6,6 +6,7 @@ import { processServerError } from "../utils/errors";
 import { validatePassword } from "../utils/validators";
 import type { TNewUserDetails } from "../types/userTypes";
 import { UserContext } from "../contexts/userContext";
+import { handleDataEntry } from "../utils/dataEntry";
 
 function Register() {
   const navigate = useNavigate();
@@ -25,9 +26,7 @@ function Register() {
 
   function handleDataInput(value: string, key: "name" | "email" | "password") {
     setMissingData(false);
-    setUserData((current) => {
-      return { ...current, [key]: value };
-    });
+    handleDataEntry(key, value, setUserData);
   }
 
   async function registerUser(event: React.FormEvent<HTMLFormElement>) {

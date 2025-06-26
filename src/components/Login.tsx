@@ -4,6 +4,7 @@ import { loginUser } from "../api";
 import { UserContext } from "../contexts/userContext";
 import { processLoggingInError } from "../utils/errors";
 import { Navigate } from "react-router-dom";
+import { handleDataEntry } from "../utils/dataEntry";
 
 function Login() {
   const [userDetails, setUserDetails] = useState<TUserDetails>({
@@ -15,12 +16,6 @@ function Login() {
 
   if (loggedInUser) {
     return <Navigate to="/applications" />;
-  }
-
-  function handleDataInput(value: string, key: "email" | "password") {
-    setUserDetails((current) => {
-      return { ...current, [key]: value };
-    });
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -45,7 +40,7 @@ function Login() {
           name="email"
           id="email"
           onChange={(event) => {
-            handleDataInput(event.target.value, "email");
+            handleDataEntry("email", event.target.value, setUserDetails);
           }}
         />
         <br />
@@ -55,7 +50,7 @@ function Login() {
           name="password"
           id="password"
           onChange={(event) => {
-            handleDataInput(event.target.value, "password");
+            handleDataEntry("password", event.target.value, setUserDetails);
           }}
         />
         <br />
