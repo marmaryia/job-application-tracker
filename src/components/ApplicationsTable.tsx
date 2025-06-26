@@ -3,20 +3,24 @@ import type { TApplication } from "../types/applicationTypes";
 import { UserContext } from "../contexts/userContext";
 import { getApplicationsByUserId } from "../api";
 import ApplicationsTableRow from "./ApplicationsTableRow";
+import { useNavigate } from "react-router-dom";
 
 function ApplicationsTable({
   sortBy,
   order,
   status,
+  refetchData,
 }: {
   sortBy: string | null;
   order: string | null;
   status: string | null;
+  refetchData: number;
 }) {
-  const { loggedInUser } = useContext(UserContext);
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
   const [applicationsData, setApplicationsData] = useState<TApplication[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   async function getApplications() {
     setIsLoading(true);
@@ -30,7 +34,11 @@ function ApplicationsTable({
         status
       );
       setApplicationsData(applications);
-    } catch {
+    } catch (apiError: any) {
+      if (apiError.status === 401) {
+        setLoggedInUser(null);
+        navigate("/login");
+      }
       setError(true);
     } finally {
       setIsLoading(false);
@@ -39,7 +47,7 @@ function ApplicationsTable({
 
   useEffect(() => {
     getApplications();
-  }, [sortBy, order, status]);
+  }, [sortBy, order, status, refetchData]);
 
   if (error) return <p>There has been an error</p>;
   if (isLoading) return <p>Fetching data</p>;

@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { AxiosRequestConfig } from "axios";
+import type { TNewApplication } from "./types/applicationTypes";
 
 const authApi = axios.create({
   baseURL: "http://127.0.0.1:5000/api/",
@@ -89,5 +90,20 @@ export async function patchApplicationStatus(
       },
     }
   );
+  return application;
+}
+
+export async function postNewApplication(
+  accessToken: string,
+  applicationData: TNewApplication
+) {
+  const {
+    data: { application },
+  } = await api.post("applications", applicationData, {
+    headers: {
+      ...api.defaults.headers.common,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return application;
 }
