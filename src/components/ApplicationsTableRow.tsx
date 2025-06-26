@@ -1,44 +1,59 @@
 import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import type { TApplication } from "../types/applicationTypes";
 import { getDateFromIsoTimestamp } from "../utils/dates";
-
-const statuses = ["Application sent", "In review", "Rejected", "Archived"];
+import { patchApplicationStatus } from "../api";
+import { UserContext } from "../contexts/userContext";
+import { statuses } from "../assets/statuses";
 
 function ApplicationsTableRow({
   application,
   serialId,
+  setError,
 }: {
   application: TApplication;
   serialId: number;
+  setError: Function;
 }) {
   const navigate = useNavigate();
+  const { loggedInUser } = useContext(UserContext);
+  const [updatedApplication, setUpdatedApplication] =
+    useState<TApplication>(application);
+
+  async function changeStatus(event: React.ChangeEvent<HTMLSelectElement>) {
+    try {
+      const applicationFromApi = await patchApplicationStatus(
+        loggedInUser!.accessToken,
+        application.application_id,
+        event.target.value
+      );
+      setUpdatedApplication({
+        ...applicationFromApi,
+        latest_event: applicationFromApi.events[0],
+      });
+    } catch {
+      setError(true);
+    }
+  }
+
   return (
     <tr>
       <td>{serialId}</td>
       <td
         onClick={() => {
-          navigate(`/applications/${application.application_id}`);
+          navigate(`/applications/${updatedApplication.application_id}`);
         }}
       >
-        {application.company}
+        {updatedApplication.company}
       </td>
-      <td>{application.position}</td>
-      <td>{getDateFromIsoTimestamp(application.date_created)}</td>
+      <td>{updatedApplication.position}</td>
+      <td>{getDateFromIsoTimestamp(updatedApplication.date_created)}</td>
       <td>
         <select
           name="statuses"
           id="statuses"
-          value={application.status}
-          // onChange={(e) => {
-          //   setApplicationsData((currentData) => {
-          //     const newData = [...currentData];
-          //     newData.forEach((item, i) => {
-          //       item.recent = { ...currentData[i].recent };
-          //     });
-          //     newData[i].status = e.target.value;
-          //     return newData;
-          //   });
-          // }}
+          value={updatedApplication.status}
+          onChange={changeStatus}
         >
           <option value="" disabled></option>
           {statuses.map((appStatus, i) => {
@@ -51,11 +66,13 @@ function ApplicationsTableRow({
         </select>
       </td>
       <td>
-        {getDateFromIsoTimestamp(application.latest_event.date)}:{" "}
-        {application.latest_event.title}
+        {getDateFromIsoTimestamp(updatedApplication.latest_event.date)}:{" "}
+        {updatedApplication.latest_event.title}
       </td>
       <td>
-        {application.job_url && <a href={application.job_url}>To listing</a>}
+        {updatedApplication.job_url && (
+          <a href={updatedApplication.job_url}>To listing</a>
+        )}
       </td>
     </tr>
   );

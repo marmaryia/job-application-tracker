@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import "./styles/PopupStyles.css";
 
 import Header from "./components/Header";
 import ApplicationsList from "./components/ApplicationsListPage";

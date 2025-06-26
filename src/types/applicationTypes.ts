@@ -11,3 +11,13 @@ export interface TApplication {
   position: string;
   status: string;
 }
+
+export interface TNewApplication {
+  user_id: number;
+  company: string;
+  date_created: string;
+  job_url: string;
+  position: string;
+  status: string;
+  notes: string;
+}

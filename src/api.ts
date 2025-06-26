@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { AxiosRequestConfig } from "axios";
+import type { TNewApplication } from "./types/applicationTypes";
 
 const authApi = axios.create({
   baseURL: "http://127.0.0.1:5000/api/",
@@ -53,10 +54,13 @@ export async function getApplicationsByUserId(
   order: string | null,
   status: string | null
 ) {
-  const url = `users/${userId}/applications?sort_by=${
+  let url = `users/${userId}/applications?sort_by=${
     sortBy ? sortBy : "date_created"
-  }&order=${order ? order : "desc"}&status=${status}`;
+  }&order=${order ? order : "desc"}`;
 
+  if (status) {
+    url += `&status=${status}`;
+  }
   const {
     data: { applications },
   } = await api.get(url, {
@@ -67,4 +71,39 @@ export async function getApplicationsByUserId(
   });
 
   return applications;
+}
+
+export async function patchApplicationStatus(
+  accessToken: string,
+  applicationId: number,
+  newStatus: string
+) {
+  const {
+    data: { application },
+  } = await api.patch(
+    `applications/${applicationId}`,
+    { new_status: newStatus },
+    {
+      headers: {
+        ...api.defaults.headers.common,
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  return application;
+}
+
+export async function postNewApplication(
+  accessToken: string,
+  applicationData: TNewApplication
+) {
+  const {
+    data: { application },
+  } = await api.post("applications", applicationData, {
+    headers: {
+      ...api.defaults.headers.common,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return application;
 }

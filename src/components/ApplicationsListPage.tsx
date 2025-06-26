@@ -1,8 +1,9 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
 
 import { UserContext } from "../contexts/userContext";
 import ApplicationsTable from "./ApplicationsTable";
+import NewApplicationPopup from "./NewApplicationPopup";
 
 function ApplicationsList() {
   const { loggedInUser } = useContext(UserContext);
@@ -11,6 +12,9 @@ function ApplicationsList() {
     return <Navigate to="/login" />;
   }
 
+  const [popupOpen, setPopupOpen] = useState<boolean>(false);
+  const [submitSuccessful, setSubmitSuccessful] = useState<boolean>(false);
+  const [refetchData, setRefetchData] = useState<number>(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const sortByQuery = searchParams.get("sort_by");
   const orderQuery = searchParams.get("order");
@@ -64,14 +68,29 @@ function ApplicationsList() {
         >
           {orderQuery === "desc" || !orderQuery ? "Oldest" : "Newest"} first
         </button>
-        <input type="text" placeholder="Company name" />
-        <button>Search by company</button>
-        <button>New application</button>
+        <input type="text" placeholder="Company name or position" />
+        <button>Search</button>
+        <button
+          onClick={() => {
+            setPopupOpen(true);
+            setSubmitSuccessful(false);
+          }}
+        >
+          New application
+        </button>
+        <NewApplicationPopup
+          popupOpen={popupOpen}
+          setPopupOpen={setPopupOpen}
+          submitSuccessful={submitSuccessful}
+          setSubmitSuccessful={setSubmitSuccessful}
+          setRefetchData={setRefetchData}
+        />
       </div>
       <ApplicationsTable
         sortBy={sortByQuery}
         order={orderQuery}
         status={statusQuery}
+        refetchData={refetchData}
       />
     </section>
   );
