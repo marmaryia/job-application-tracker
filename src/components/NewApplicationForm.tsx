@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { statuses } from "../assets/statuses";
 import { handleDataEntry } from "../utils/dataEntry";
@@ -68,8 +69,10 @@ function NewApplicationForm({
             (application: TDuplicateApplication, i) => {
               return (
                 <li key={i}>
-                  {application.position} at {application.company} on{" "}
-                  {getDateFromIsoTimestamp(application.date_created)}
+                  <Link to={`${application.application_id}`}>
+                    {application.position} at {application.company} on{" "}
+                    {getDateFromIsoTimestamp(application.date_created)}
+                  </Link>
                 </li>
               );
             }
