@@ -1,5 +1,4 @@
 import axios from "axios";
-import type { AxiosRequestConfig } from "axios";
 import type { TNewApplication } from "./types/applicationTypes";
 
 const authApi = axios.create({
@@ -106,4 +105,16 @@ export async function postNewApplication(
     },
   });
   return application;
+}
+
+export async function deleteApplicationById(
+  accessToken: string,
+  applicationId: number
+) {
+  await api.delete(`applications/${applicationId}`, {
+    headers: {
+      ...api.defaults.headers.common,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 }
