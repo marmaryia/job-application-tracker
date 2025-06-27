@@ -118,3 +118,18 @@ export async function deleteApplicationById(
     },
   });
 }
+
+export async function getApplicationById(
+  accessToken: string,
+  applicationId: number
+) {
+  const {
+    data: { application },
+  } = await api.get(`applications/${applicationId}`, {
+    headers: {
+      ...api.defaults.headers.common,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return application;
+}

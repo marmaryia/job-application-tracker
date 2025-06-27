@@ -1,3 +1,5 @@
+import type { TEvent } from "./eventTypes";
+
 export interface TApplication {
   application_id: number;
   company: string;
@@ -28,4 +30,9 @@ export interface TDuplicateApplication {
   company: string;
   date_created: string;
   position: string;
+}
+
+export interface TApplicationFull extends Omit<TApplication, "latest_event"> {
+  notes: string | null;
+  events: TEvent[];
 }
