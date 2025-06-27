@@ -20,4 +20,12 @@ export interface TNewApplication {
   position: string;
   status: string;
   notes: string;
+  allow_duplicates?: boolean;
+}
+
+export interface TDuplicateApplication {
+  application_id: number;
+  company: string;
+  date_created: string;
+  position: string;
 }
