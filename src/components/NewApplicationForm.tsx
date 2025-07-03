@@ -79,9 +79,10 @@ function NewApplicationForm({
           )}
         </ul>
         <p>
-          Do you want to add the current anyway? Click on an existing one to go
-          to view and edit it instead
+          Do you want to add another one anyway? Click on an existing one to go
+          to view it 
         </p>
+        <button onClick={() => setDuplicateApplications(undefined)}>Edit</button>
         <button onClick={overrideDuplicate}>Add anyway</button>
         <button onClick={() => setPopupOpen(false)}>Cancel</button>
       </div>
