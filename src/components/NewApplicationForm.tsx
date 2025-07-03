@@ -9,7 +9,7 @@ import type {
   TDuplicateApplication,
 } from "../types/applicationTypes";
 import { postNewApplication } from "../api";
-import { getDateFromIsoTimestamp } from "../utils/dates";
+import { formatIsoTimestamp } from "../utils/dates";
 
 function NewApplicationForm({
   setSubmitSuccessful,
@@ -71,7 +71,7 @@ function NewApplicationForm({
                 <li key={i}>
                   <Link to={`${application.application_id}`}>
                     {application.position} at {application.company} on{" "}
-                    {getDateFromIsoTimestamp(application.date_created)}
+                    {formatIsoTimestamp(application.date_created, true)}
                   </Link>
                 </li>
               );

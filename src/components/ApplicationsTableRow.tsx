@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import type { TApplication } from "../types/applicationTypes";
-import { getDateFromIsoTimestamp } from "../utils/dates";
+import { formatIsoTimestamp } from "../utils/dates";
 import { patchApplicationStatus } from "../api";
 import { UserContext } from "../contexts/userContext";
 import { statuses } from "../assets/statuses";
@@ -47,7 +47,7 @@ function ApplicationsTableRow({
         {updatedApplication.company}
       </td>
       <td>{updatedApplication.position}</td>
-      <td>{getDateFromIsoTimestamp(updatedApplication.date_created)}</td>
+      <td>{formatIsoTimestamp(updatedApplication.date_created, true)}</td>
       <td>
         <select
           name="statuses"
@@ -66,7 +66,7 @@ function ApplicationsTableRow({
         </select>
       </td>
       <td>
-        {getDateFromIsoTimestamp(updatedApplication.latest_event.date)}:{" "}
+        {formatIsoTimestamp(updatedApplication.latest_event.date, true)}:{" "}
         {updatedApplication.latest_event.title}
       </td>
       <td>

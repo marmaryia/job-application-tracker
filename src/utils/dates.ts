@@ -1,4 +1,8 @@
-export function getDateFromIsoTimestamp(timestamp: string) {
+export function formatIsoTimestamp(timestamp: string, dateOnly: boolean) {
   const date = new Date(timestamp);
-  return date.toLocaleDateString("en-GB");
+  if (dateOnly) {
+    return date.toLocaleDateString("en-GB");
+  }
+
+  return date.toLocaleString("en-GB");
 }

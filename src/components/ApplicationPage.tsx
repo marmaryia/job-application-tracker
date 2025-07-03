@@ -18,7 +18,7 @@ function ApplicationPage() {
   const application_id = Number(useParams().application_id);
   const [popupOpen, setPopupOpen] = useState<boolean>(false);
   const [application, setApplication] = useState<TApplicationFull>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
   async function deleteApplication() {
@@ -61,7 +61,7 @@ function ApplicationPage() {
 
   return (
     <section>
-      <h2>You application to {application ? application.company : "..."}</h2>
+      <h2>You application to {application!.company}</h2>
       <button onClick={() => setPopupOpen(true)}>Delete</button>
       <Popup open={popupOpen}>
         <h3>Deleting your application</h3>
