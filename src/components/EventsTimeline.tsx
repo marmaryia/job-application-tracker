@@ -15,7 +15,7 @@ function EventsTimeline({events}: {events: TEvent[]}) {
     contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
      date={formatIsoTimestamp( appEvent.date, false)}
    
-  //iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+  iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
    // icon={<WorkIcon />}
   >
     <h3 className="vertical-timeline-element-title">{appEvent.title}</h3>

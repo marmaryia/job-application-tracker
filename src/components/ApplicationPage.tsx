@@ -5,7 +5,7 @@ import { deleteApplicationById, getApplicationById } from "../api";
 import Popup from "reactjs-popup";
 import type { TApplicationFull } from "../types/applicationTypes";
 import EventsTimeline from "./EventsTimeline";
-
+import ApplicationInfoSection from "./ApplicationInfoSection";
 
 function ApplicationPage() {
   const { loggedInUser } = useContext(UserContext);
@@ -61,7 +61,8 @@ function ApplicationPage() {
 
   return (
     <section>
-      <h2>You application to {application!.company}</h2>
+      <h2>You application to {application!.company} </h2>
+      <span>{application!.status}</span>
       <button onClick={() => setPopupOpen(true)}>Delete</button>
       <Popup open={popupOpen}>
         <h3>Deleting your application</h3>
@@ -69,7 +70,10 @@ function ApplicationPage() {
         <button onClick={deleteApplication}>Yes, delete</button>
         <button onClick={() => setPopupOpen(false)}>Cancel</button>
       </Popup>
-      <EventsTimeline events={application!.events} />
+      <div className="application-container">
+        <EventsTimeline events={application!.events} />{" "}
+        <ApplicationInfoSection application={application!} />
+      </div>
     </section>
   );
 }
