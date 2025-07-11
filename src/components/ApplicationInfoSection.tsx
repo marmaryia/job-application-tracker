@@ -2,6 +2,13 @@ import { useState } from "react";
 import type { TApplicationFull } from "../types/applicationTypes";
 import { handleDataEntry } from "../utils/dataEntry";
 
+const keys: ["company", "position", "job_url", "notes"] = [
+  "company",
+  "position",
+  "job_url",
+  "notes",
+];
+
 function ApplicationInfoSection({
   application,
 }: {
@@ -15,39 +22,32 @@ function ApplicationInfoSection({
   }
 
   return (
-    <section className="application-info-container">
-      <p className="application-info-tag">Company</p>
-      {activeField === "company" ? (
-        <input
-          autoFocus
-          type="text"
-          value={applicationData.company}
-          onChange={(e) => {
-            handleDataEntry("company", e.target.value, setApplicationData);
-          }}
-          onBlur={handleBlur}
-        />
-      ) : (
-        <p
-          className="application-info"
-          onClick={() => {
-            setActiveField("company");
-          }}
-        >
-          {applicationData.company}
-        </p>
-      )}
-
-      <p className="application-info-tag">Position</p>
-      <p className="application-info">{applicationData.position}</p>
-      <p className="application-info-tag">Job listing URL</p>
-      <p className="application-info">
-        {applicationData.job_url ? applicationData.job_url : "Not provided..."}
-      </p>
-      <p className="application-info-tag">Notes</p>
-      <p className="application-info">
-        {applicationData.notes ? applicationData.notes : "No notes yet..."}
-      </p>
+    <section>
+      {keys.map((key) => {
+        return (
+          <div
+            className="application-info-container"
+            onClick={() => {
+              setActiveField(key);
+            }}
+          >
+            <p className="application-info-tag">{key}</p>
+            {activeField === key ? (
+              <input
+                autoFocus
+                type="text"
+                value={applicationData[key]!}
+                onChange={(e) => {
+                  handleDataEntry(key, e.target.value, setApplicationData);
+                }}
+                onBlur={handleBlur}
+              />
+            ) : (
+              <p className="application-info">{applicationData[key]}</p>
+            )}
+          </div>
+        );
+      })}
     </section>
   );
 }
