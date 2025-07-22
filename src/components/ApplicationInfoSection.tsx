@@ -20,21 +20,20 @@ function ApplicationInfoSection({
   application: TApplicationFull;
   setApplication: Function;
 }) {
-  const [activeField, setActiveField] = useState<string>("");
-  const { events, ...applicationInfo } = application;
-  const [applicationData, setApplicationData] = useState(applicationInfo);
   const { loggedInUser } = useContext(UserContext);
+  const [activeField, setActiveField] = useState<string>("");
+  const [applicationData, setApplicationData] = useState(application);
 
-  async function handleBlur() {
+  async function handleDataUpdate() {
     // To DO
     // Send api request only if data is updated
-    // Add "save" button and / or save on enter
 
     setActiveField("");
+    const { events, ...updatedApplicationInfo } = applicationData;
     try {
       const updatedApplication = await editApplicationById(
         loggedInUser!.accessToken,
-        applicationData
+        updatedApplicationInfo
       );
       setApplication(updatedApplication);
     } catch (error) {
@@ -63,15 +62,15 @@ function ApplicationInfoSection({
                   id="statuses"
                   value={applicationData.status}
                   onChange={async (e) => {
-                    const { events, ...applicationInfo } =
+                    const updatedStatusApplication =
                       await patchApplicationStatus(
                         loggedInUser!.accessToken,
                         applicationData.application_id,
                         e.target.value
                       );
                     setActiveField("");
-                    setApplication({ events, applicationInfo });
-                    setApplicationData(applicationInfo);
+                    setApplication(updatedStatusApplication);
+                    setApplicationData(updatedStatusApplication);
                   }}
                   onBlur={() => setActiveField("")}
                 >
@@ -89,7 +88,7 @@ function ApplicationInfoSection({
                   action="submit"
                   onSubmit={(e) => {
                     e.preventDefault();
-                    handleBlur();
+                    handleDataUpdate();
                   }}
                 >
                   <input
@@ -99,7 +98,7 @@ function ApplicationInfoSection({
                     onChange={(e) => {
                       handleDataEntry(key, e.target.value, setApplicationData);
                     }}
-                    onBlur={handleBlur}
+                    onBlur={handleDataUpdate}
                   />
                 </form>
               )
