@@ -73,7 +73,7 @@ function ApplicationInfoSection({
                     setApplication({ events, applicationInfo });
                     setApplicationData(applicationInfo);
                   }}
-                  onBlur={handleBlur}
+                  onBlur={() => setActiveField("")}
                 >
                   <option value="" disabled></option>
                   {statuses.map((appStatus, i) => {
@@ -85,15 +85,23 @@ function ApplicationInfoSection({
                   })}
                 </select>
               ) : (
-                <input
-                  autoFocus
-                  type="text"
-                  value={applicationData[key]!}
-                  onChange={(e) => {
-                    handleDataEntry(key, e.target.value, setApplicationData);
+                <form
+                  action="submit"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleBlur();
                   }}
-                  onBlur={handleBlur}
-                />
+                >
+                  <input
+                    autoFocus
+                    type="text"
+                    value={applicationData[key]!}
+                    onChange={(e) => {
+                      handleDataEntry(key, e.target.value, setApplicationData);
+                    }}
+                    onBlur={handleBlur}
+                  />
+                </form>
               )
             ) : (
               <p className="application-info">{applicationData[key]}</p>
