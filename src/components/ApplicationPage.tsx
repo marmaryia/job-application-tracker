@@ -71,10 +71,11 @@ function ApplicationPage() {
         <button onClick={() => setPopupOpen(false)}>Cancel</button>
       </Popup>
       <div className="application-container">
-        <EventsTimeline events={application!.events} />{" "}
+        <EventsTimeline events={application!.events} />
         <ApplicationInfoSection
           application={application!}
           setApplication={setApplication}
+          setError={setError}
         />
       </div>
     </section>

@@ -16,18 +16,17 @@ const keys: ["company", "position", "status", "job_url", "notes"] = [
 function ApplicationInfoSection({
   application,
   setApplication,
+  setError,
 }: {
   application: TApplicationFull;
   setApplication: Function;
+  setError: Function;
 }) {
   const { loggedInUser } = useContext(UserContext);
   const [activeField, setActiveField] = useState<string>("");
   const [applicationData, setApplicationData] = useState(application);
 
   async function handleDataUpdate() {
-    // To DO
-    // Send api request only if data is updated
-
     setActiveField("");
     const { events, ...updatedApplicationInfo } = applicationData;
     try {
@@ -37,7 +36,24 @@ function ApplicationInfoSection({
       );
       setApplication(updatedApplication);
     } catch (error) {
-      console.log(error);
+      setError(true);
+    }
+  }
+
+  async function handleStatusChange(
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) {
+    try {
+      const updatedStatusApplication = await patchApplicationStatus(
+        loggedInUser!.accessToken,
+        applicationData.application_id,
+        event.target.value
+      );
+      setActiveField("");
+      setApplication(updatedStatusApplication);
+      setApplicationData(updatedStatusApplication);
+    } catch {
+      setError(true);
     }
   }
 
@@ -61,17 +77,7 @@ function ApplicationInfoSection({
                   name="statuses"
                   id="statuses"
                   value={applicationData.status}
-                  onChange={async (e) => {
-                    const updatedStatusApplication =
-                      await patchApplicationStatus(
-                        loggedInUser!.accessToken,
-                        applicationData.application_id,
-                        e.target.value
-                      );
-                    setActiveField("");
-                    setApplication(updatedStatusApplication);
-                    setApplicationData(updatedStatusApplication);
-                  }}
+                  onChange={(e) => handleStatusChange(e)}
                   onBlur={() => setActiveField("")}
                 >
                   <option value="" disabled></option>
