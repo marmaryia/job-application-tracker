@@ -1,12 +1,14 @@
 import { useContext, useState } from "react";
 import type { TApplicationFull } from "../types/applicationTypes";
 import { handleDataEntry } from "../utils/dataEntry";
-import { editApplicationById } from "../api";
+import { editApplicationById, patchApplicationStatus } from "../api";
 import { UserContext } from "../contexts/userContext";
+import { statuses } from "../assets/statuses";
 
-const keys: ["company", "position", "job_url", "notes"] = [
+const keys: ["company", "position", "status", "job_url", "notes"] = [
   "company",
   "position",
+  "status",
   "job_url",
   "notes",
 ];
@@ -55,15 +57,44 @@ function ApplicationInfoSection({
               {key[0].toUpperCase() + key.replace("_", " ").slice(1)}
             </p>
             {activeField === key ? (
-              <input
-                autoFocus
-                type="text"
-                value={applicationData[key]!}
-                onChange={(e) => {
-                  handleDataEntry(key, e.target.value, setApplicationData);
-                }}
-                onBlur={handleBlur}
-              />
+              key === "status" ? (
+                <select
+                  name="statuses"
+                  id="statuses"
+                  value={applicationData.status}
+                  onChange={async (e) => {
+                    const { events, ...applicationInfo } =
+                      await patchApplicationStatus(
+                        loggedInUser!.accessToken,
+                        applicationData.application_id,
+                        e.target.value
+                      );
+                    setActiveField("");
+                    setApplication({ events, applicationInfo });
+                    setApplicationData(applicationInfo);
+                  }}
+                  onBlur={handleBlur}
+                >
+                  <option value="" disabled></option>
+                  {statuses.map((appStatus, i) => {
+                    return (
+                      <option key={i} value={appStatus}>
+                        {appStatus}
+                      </option>
+                    );
+                  })}
+                </select>
+              ) : (
+                <input
+                  autoFocus
+                  type="text"
+                  value={applicationData[key]!}
+                  onChange={(e) => {
+                    handleDataEntry(key, e.target.value, setApplicationData);
+                  }}
+                  onBlur={handleBlur}
+                />
+              )
             ) : (
               <p className="application-info">{applicationData[key]}</p>
             )}

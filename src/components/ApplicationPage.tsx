@@ -62,7 +62,7 @@ function ApplicationPage() {
   return (
     <section>
       <h2>You application to {application!.company} </h2>
-      <span>{application!.status}</span>
+
       <button onClick={() => setPopupOpen(true)}>Delete</button>
       <Popup open={popupOpen}>
         <h3>Deleting your application</h3>
