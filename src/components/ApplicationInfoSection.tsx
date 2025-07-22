@@ -13,8 +13,10 @@ const keys: ["company", "position", "job_url", "notes"] = [
 
 function ApplicationInfoSection({
   application,
+  setApplication,
 }: {
   application: TApplicationFull;
+  setApplication: Function;
 }) {
   const [activeField, setActiveField] = useState<string>("");
   const { events, ...applicationInfo } = application;
@@ -25,13 +27,17 @@ function ApplicationInfoSection({
     // To DO
     // Send api request only if data is updated
     // Add "save" button and / or save on enter
-    // Update info on page and events
-    setActiveField("");
 
-    const updatedApplication = await editApplicationById(
-      loggedInUser!.accessToken,
-      applicationData
-    );
+    setActiveField("");
+    try {
+      const updatedApplication = await editApplicationById(
+        loggedInUser!.accessToken,
+        applicationData
+      );
+      setApplication(updatedApplication);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

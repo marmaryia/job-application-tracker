@@ -72,7 +72,10 @@ function ApplicationPage() {
       </Popup>
       <div className="application-container">
         <EventsTimeline events={application!.events} />{" "}
-        <ApplicationInfoSection application={application!} />
+        <ApplicationInfoSection
+          application={application!}
+          setApplication={setApplication}
+        />
       </div>
     </section>
   );
