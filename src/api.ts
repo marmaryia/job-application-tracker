@@ -1,6 +1,5 @@
 import axios from "axios";
-import type { AxiosRequestConfig } from "axios";
-import type { TNewApplication } from "./types/applicationTypes";
+import type { TApplication, TNewApplication } from "./types/applicationTypes";
 
 const authApi = axios.create({
   baseURL: "http://127.0.0.1:5000/api/",
@@ -100,6 +99,50 @@ export async function postNewApplication(
   const {
     data: { application },
   } = await api.post("applications", applicationData, {
+    headers: {
+      ...api.defaults.headers.common,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return application;
+}
+
+export async function deleteApplicationById(
+  accessToken: string,
+  applicationId: number
+) {
+  await api.delete(`applications/${applicationId}`, {
+    headers: {
+      ...api.defaults.headers.common,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}
+
+export async function getApplicationById(
+  accessToken: string,
+  applicationId: number
+) {
+  const {
+    data: { application },
+  } = await api.get(`applications/${applicationId}`, {
+    headers: {
+      ...api.defaults.headers.common,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return application;
+}
+
+export async function editApplicationById(
+  accessToken: string,
+  applicationData: Omit<TApplication, "latest_event">
+) {
+  const { application_id, ...newData } = applicationData;
+
+  const {
+    data: { application },
+  } = await api.put(`applications/${application_id}`, newData, {
     headers: {
       ...api.defaults.headers.common,
       Authorization: `Bearer ${accessToken}`,

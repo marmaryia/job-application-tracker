@@ -1,0 +1,9 @@
+.application-container{
+    display: grid;
+    grid-template-columns: 40% 60%;
+}
+
+.application-info-container {
+    display: grid;
+    grid-template-columns: 40% 60%;
+}

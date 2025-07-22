@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/react-vertical-timeline-component": "^3.3.6",
     "axios": "^1.10.0",
+    "prop-types": "^15.8.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.2",
+    "react-vertical-timeline-component": "^3.5.3",
     "reactjs-popup": "^2.0.6"
   },
   "devDependencies": {
