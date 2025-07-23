@@ -7,7 +7,9 @@ import type { TEvent } from "../types/eventTypes";
 import { formatIsoTimestamp } from "../utils/dates";
 import { deleteEventById } from "../api";
 import { UserContext } from "../contexts/userContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import AddEventButton from "./AddEventButton";
+import AddEventForm from "./AddEventForm";
 
 function EventsTimeline({
   events,
@@ -17,6 +19,7 @@ function EventsTimeline({
   setPageUpdates: Function;
 }) {
   const { loggedInUser } = useContext(UserContext);
+  const [addingEvent, setAddingEvent] = useState<boolean>(false);
 
   async function deleteEvent(event_id: number) {
     try {
@@ -54,9 +57,18 @@ function EventsTimeline({
       })}
 
       <VerticalTimelineElement
+        className="vertical-timeline-element--work"
+        contentStyle={
+          addingEvent
+            ? { background: "rgb(33, 150, 243)", color: "#fff" }
+            : { display: "none" }
+        }
+        contentArrowStyle={{ borderRight: "7px solid  rgb(33, 150, 243)" }}
         iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
-        //icon={<StarIcon />}
-      />
+        icon={<AddEventButton setAddingEvent={setAddingEvent} />}
+      >
+        {addingEvent && <AddEventForm />}
+      </VerticalTimelineElement>
     </VerticalTimeline>
   );
 }
