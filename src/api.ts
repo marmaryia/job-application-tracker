@@ -150,3 +150,12 @@ export async function editApplicationById(
   });
   return application;
 }
+
+export async function deleteEventById(accessToken: string, eventId: number) {
+  await api.delete(`events/${eventId}`, {
+    headers: {
+      ...api.defaults.headers.common,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}
