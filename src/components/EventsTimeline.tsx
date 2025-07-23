@@ -22,7 +22,7 @@ function EventsTimeline({
     try {
       await deleteEventById(loggedInUser!.accessToken, event_id);
       setPageUpdates((current: number) => current + 1);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
     }
   }
@@ -40,9 +40,11 @@ function EventsTimeline({
             iconStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}
             // icon={<WorkIcon />}
           >
-            <button onClick={() => deleteEvent(appEvent.event_id)}>
-              Delete
-            </button>
+            {!appEvent.undeletable && (
+              <button onClick={() => deleteEvent(appEvent.event_id)}>
+                Delete
+              </button>
+            )}
             <h3 className="vertical-timeline-element-title">
               {appEvent.title}
             </h3>

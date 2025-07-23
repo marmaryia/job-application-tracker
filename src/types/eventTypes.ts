@@ -3,4 +3,5 @@ export interface TEvent {
   event_id: number;
   title: string;
   notes?: null | string;
+  undeletable: boolean;
 }
