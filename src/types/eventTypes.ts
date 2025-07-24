@@ -5,3 +5,5 @@ export interface TEvent {
   notes?: null | string;
   undeletable: boolean;
 }
+
+export interface TNewEvent extends Omit<TEvent, "event_id" | "undeletable"> {}

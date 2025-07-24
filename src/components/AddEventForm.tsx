@@ -2,8 +2,9 @@ import { useContext, useState } from "react";
 import { UserContext } from "../contexts/userContext";
 import { useParams } from "react-router-dom";
 import { handleDataEntry } from "../utils/dataEntry";
+import { postNewEvent } from "../api";
 
-function AddEventForm() {
+function AddEventForm({ setAddingEvent }: { setAddingEvent: Function }) {
   const { loggedInUser } = useContext(UserContext);
   const application_id = Number(useParams().application_id);
   const [eventData, setEventData] = useState({
@@ -14,10 +15,18 @@ function AddEventForm() {
     notes: "",
   });
 
-  console.log(eventData);
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    try {
+      const newEvent = await postNewEvent(loggedInUser!.accessToken, eventData);
+      setAddingEvent(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
-    <form action="submit">
+    <form action="submit" onSubmit={handleSubmit}>
       <h3 className="vertical-timeline-element-title">New event</h3>
       <label htmlFor="event-title">Event:</label> <br />
       <input
@@ -46,6 +55,7 @@ function AddEventForm() {
         onChange={(e) => handleDataEntry("date", e.target.value, setEventData)}
       />
       <br />
+      <button type="submit">Save</button>
     </form>
   );
 }

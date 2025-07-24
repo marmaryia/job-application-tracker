@@ -67,7 +67,7 @@ function EventsTimeline({
         iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
         icon={<AddEventButton setAddingEvent={setAddingEvent} />}
       >
-        {addingEvent && <AddEventForm />}
+        {addingEvent && <AddEventForm setAddingEvent={setAddingEvent} />}
       </VerticalTimelineElement>
     </VerticalTimeline>
   );

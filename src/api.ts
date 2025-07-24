@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { TApplication, TNewApplication } from "./types/applicationTypes";
+import type { TNewEvent } from "./types/eventTypes";
 
 const authApi = axios.create({
   baseURL: "http://127.0.0.1:5000/api/",
@@ -158,4 +159,16 @@ export async function deleteEventById(accessToken: string, eventId: number) {
       Authorization: `Bearer ${accessToken}`,
     },
   });
+}
+
+export async function postNewEvent(accessToken: string, eventData: TNewEvent) {
+  const {
+    data: { event },
+  } = await api.post("events", eventData, {
+    headers: {
+      ...api.defaults.headers.common,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return event;
 }
