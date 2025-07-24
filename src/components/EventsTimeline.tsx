@@ -39,7 +39,7 @@ function EventsTimeline({
             className="vertical-timeline-element--work"
             contentStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}
             contentArrowStyle={{ borderRight: "7px solid  rgb(33, 150, 243)" }}
-            date={formatIsoTimestamp(appEvent.date, false)}
+            date={formatIsoTimestamp(appEvent.date, true)}
             iconStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}
             // icon={<WorkIcon />}
           >
@@ -67,7 +67,12 @@ function EventsTimeline({
         iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
         icon={<AddEventButton setAddingEvent={setAddingEvent} />}
       >
-        {addingEvent && <AddEventForm setAddingEvent={setAddingEvent} />}
+        {addingEvent && (
+          <AddEventForm
+            setAddingEvent={setAddingEvent}
+            setPageUpdates={setPageUpdates}
+          />
+        )}
       </VerticalTimelineElement>
     </VerticalTimeline>
   );

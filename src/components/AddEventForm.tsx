@@ -4,7 +4,13 @@ import { useParams } from "react-router-dom";
 import { handleDataEntry } from "../utils/dataEntry";
 import { postNewEvent } from "../api";
 
-function AddEventForm({ setAddingEvent }: { setAddingEvent: Function }) {
+function AddEventForm({
+  setAddingEvent,
+  setPageUpdates,
+}: {
+  setAddingEvent: Function;
+  setPageUpdates: Function;
+}) {
   const { loggedInUser } = useContext(UserContext);
   const application_id = Number(useParams().application_id);
   const [eventData, setEventData] = useState({
@@ -20,6 +26,7 @@ function AddEventForm({ setAddingEvent }: { setAddingEvent: Function }) {
     try {
       const newEvent = await postNewEvent(loggedInUser!.accessToken, eventData);
       setAddingEvent(false);
+      setPageUpdates((current: number) => current + 1);
     } catch (error) {
       console.log(error);
     }
