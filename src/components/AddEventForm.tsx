@@ -13,6 +13,7 @@ function AddEventForm({
 }) {
   const { loggedInUser } = useContext(UserContext);
   const application_id = Number(useParams().application_id);
+  const [error, setError] = useState([false, ""]);
   const [eventData, setEventData] = useState({
     user_id: loggedInUser!.id,
     application_id: application_id,
@@ -27,8 +28,15 @@ function AddEventForm({
       const newEvent = await postNewEvent(loggedInUser!.accessToken, eventData);
       setAddingEvent(false);
       setPageUpdates((current: number) => current + 1);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response.data.error === "FORBIDDEN_ACTION") {
+        setError([
+          true,
+          "The event cannot be saved as the date selected preceeds application date",
+        ]);
+      } else {
+        setError([true, "There has been an error, please try again later"]);
+      }
     }
   }
 
@@ -59,9 +67,13 @@ function AddEventForm({
         id="event-notes"
         value={eventData.date.split("T")[0]}
         max={new Date(Date.now()).toISOString().split("T")[0]}
-        onChange={(e) => handleDataEntry("date", e.target.value, setEventData)}
+        onChange={(e) => {
+          setError([false, ""]);
+          handleDataEntry("date", e.target.value, setEventData);
+        }}
       />
       <br />
+      {error[0] && <p>{error[1]}</p>}
       <button type="submit">Save</button>
     </form>
   );

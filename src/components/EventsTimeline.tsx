@@ -41,7 +41,6 @@ function EventsTimeline({
             contentArrowStyle={{ borderRight: "7px solid  rgb(33, 150, 243)" }}
             date={formatIsoTimestamp(appEvent.date, true)}
             iconStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}
-            // icon={<WorkIcon />}
           >
             {!appEvent.undeletable && (
               <button onClick={() => deleteEvent(appEvent.event_id)}>
@@ -66,6 +65,7 @@ function EventsTimeline({
         contentArrowStyle={{ borderRight: "7px solid  rgb(33, 150, 243)" }}
         iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
         icon={<AddEventButton setAddingEvent={setAddingEvent} />}
+        visible={true}
       >
         {addingEvent && (
           <AddEventForm
