@@ -4,14 +4,16 @@ import { handleDataEntry } from "../utils/dataEntry";
 import { editApplicationById, patchApplicationStatus } from "../api";
 import { UserContext } from "../contexts/userContext";
 import { statuses } from "../assets/statuses";
+import { formatIsoTimestamp } from "../utils/dates";
 
-const keys: ["company", "position", "status", "job_url", "notes"] = [
+const keys: [
   "company",
   "position",
   "status",
+  "date_created",
   "job_url",
-  "notes",
-];
+  "notes"
+] = ["company", "position", "status", "date_created", "job_url", "notes"];
 
 function ApplicationInfoSection({
   application,
@@ -99,17 +101,30 @@ function ApplicationInfoSection({
                 >
                   <input
                     autoFocus
-                    type="text"
-                    value={applicationData[key]!}
+                    type={key === "date_created" ? "date" : "text"}
+                    value={
+                      key === "date_created"
+                        ? applicationData[key]!.split("T")[0]
+                        : applicationData[key]!
+                    }
                     onChange={(e) => {
                       handleDataEntry(key, e.target.value, setApplicationData);
                     }}
                     onBlur={handleDataUpdate}
+                    max={
+                      key === "date_created"
+                        ? new Date(Date.now()).toISOString().split("T")[0]
+                        : undefined
+                    }
                   />
                 </form>
               )
             ) : (
-              <p className="application-info">{applicationData[key]}</p>
+              <p className="application-info">
+                {key === "date_created"
+                  ? formatIsoTimestamp(applicationData[key], true)
+                  : applicationData[key]}
+              </p>
             )}
           </div>
         );
