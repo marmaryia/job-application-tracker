@@ -1,3 +1,5 @@
+import type { TEvent } from "../types/eventTypes";
+
 export function formatIsoTimestamp(timestamp: string, dateOnly: boolean) {
   if (timestamp.toUpperCase().charAt(-1) !== "Z") {
     timestamp += "Z";
@@ -9,4 +11,16 @@ export function formatIsoTimestamp(timestamp: string, dateOnly: boolean) {
   }
 
   return date.toLocaleString("en-GB");
+}
+
+export function eventsPreceedDate(date: string, events: TEvent[]): boolean {
+  const dateObj = new Date(date);
+
+  for (const appEvent of events) {
+    const eventDateObj = new Date(appEvent.date);
+    if (eventDateObj < dateObj && !appEvent.undeletable) {
+      return true;
+    }
+  }
+  return false;
 }

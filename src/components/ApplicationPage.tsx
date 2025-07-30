@@ -20,6 +20,7 @@ function ApplicationPage() {
   const [application, setApplication] = useState<TApplicationFull>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
+  const [pageUpdates, setPageUpdates] = useState<number>(0);
 
   async function deleteApplication() {
     try {
@@ -49,7 +50,7 @@ function ApplicationPage() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [pageUpdates]);
 
   if (isLoading) {
     return <p>Fetching data...</p>;
@@ -71,7 +72,10 @@ function ApplicationPage() {
         <button onClick={() => setPopupOpen(false)}>Cancel</button>
       </Popup>
       <div className="application-container">
-        <EventsTimeline events={application!.events} />
+        <EventsTimeline
+          events={application!.events}
+          setPageUpdates={setPageUpdates}
+        />
         <ApplicationInfoSection
           application={application!}
           setApplication={setApplication}
