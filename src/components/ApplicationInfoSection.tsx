@@ -1,19 +1,20 @@
 import { useContext, useState } from "react";
+import Popup from "reactjs-popup";
+
 import type { TApplicationFull } from "../types/applicationTypes";
 import { handleDataEntry } from "../utils/dataEntry";
 import { editApplicationById, patchApplicationStatus } from "../api";
 import { UserContext } from "../contexts/userContext";
 import { statuses } from "../assets/statuses";
-import { formatIsoTimestamp } from "../utils/dates";
+import { eventsPreceedDate, formatIsoTimestamp } from "../utils/dates";
 
-const keys: [
+const keys: ["company", "position", "date_created", "job_url", "notes"] = [
   "company",
   "position",
-  "status",
   "date_created",
   "job_url",
-  "notes"
-] = ["company", "position", "status", "date_created", "job_url", "notes"];
+  "notes",
+];
 
 function ApplicationInfoSection({
   application,
@@ -25,12 +26,12 @@ function ApplicationInfoSection({
   setError: Function;
 }) {
   const { loggedInUser } = useContext(UserContext);
-  const [activeField, setActiveField] = useState<string>("");
-  const [applicationData, setApplicationData] = useState(application);
+  const [editing, setEditing] = useState<boolean>(false);
+  const [popupOpen, setPopupOpen] = useState<boolean>(false);
 
   async function handleDataUpdate() {
-    setActiveField("");
-    const { events, ...updatedApplicationInfo } = applicationData;
+    setEditing(false);
+    const { events, ...updatedApplicationInfo } = application;
     try {
       const updatedApplication = await editApplicationById(
         loggedInUser!.accessToken,
@@ -48,12 +49,11 @@ function ApplicationInfoSection({
     try {
       const updatedStatusApplication = await patchApplicationStatus(
         loggedInUser!.accessToken,
-        applicationData.application_id,
+        application.application_id,
         event.target.value
       );
-      setActiveField("");
+
       setApplication(updatedStatusApplication);
-      setApplicationData(updatedStatusApplication);
     } catch {
       setError(true);
     }
@@ -61,74 +61,81 @@ function ApplicationInfoSection({
 
   return (
     <section>
-      {keys.map((key, i) => {
-        return (
-          <div
-            className="application-info-container"
-            onClick={() => {
-              setActiveField(key);
-            }}
-            key={i}
-          >
-            <p className="application-info-tag">
-              {key[0].toUpperCase() + key.replace("_", " ").slice(1)}
-            </p>
-            {activeField === key ? (
-              key === "status" ? (
-                <select
-                  name="statuses"
-                  id="statuses"
-                  value={applicationData.status}
-                  onChange={(e) => handleStatusChange(e)}
-                  onBlur={() => setActiveField("")}
-                >
-                  <option value="" disabled></option>
-                  {statuses.map((appStatus, i) => {
-                    return (
-                      <option key={i} value={appStatus}>
-                        {appStatus}
-                      </option>
-                    );
-                  })}
-                </select>
-              ) : (
-                <form
-                  action="submit"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleDataUpdate();
-                  }}
-                >
-                  <input
-                    autoFocus
-                    type={key === "date_created" ? "date" : "text"}
-                    value={
-                      key === "date_created"
-                        ? applicationData[key]!.split("T")[0]
-                        : applicationData[key]!
-                    }
-                    onChange={(e) => {
-                      handleDataEntry(key, e.target.value, setApplicationData);
-                    }}
-                    onBlur={handleDataUpdate}
-                    max={
-                      key === "date_created"
-                        ? new Date(Date.now()).toISOString().split("T")[0]
-                        : undefined
-                    }
-                  />
-                </form>
-              )
-            ) : (
-              <p className="application-info">
-                {key === "date_created"
-                  ? formatIsoTimestamp(applicationData[key], true)
-                  : applicationData[key]}
-              </p>
-            )}
-          </div>
-        );
-      })}
+      <p className="application-info-tag">Status</p>
+      <select
+        name="statuses"
+        id="statuses"
+        value={application.status}
+        onChange={(e) => handleStatusChange(e)}
+      >
+        <option value="" disabled></option>
+        {statuses.map((appStatus, i) => {
+          return (
+            <option key={i} value={appStatus}>
+              {appStatus}
+            </option>
+          );
+        })}
+      </select>
+      <form
+        action="submit"
+        onDoubleClick={() => setEditing(true)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleDataUpdate();
+        }}
+      >
+        {keys.map((key, i) => {
+          return (
+            <div className="application-info-container" key={i}>
+              <label htmlFor={key} className="application-info-tag">
+                {key[0].toUpperCase() + key.replace("_", " ").slice(1)}
+              </label>
+
+              <input
+                id={key}
+                disabled={!editing}
+                type={key === "date_created" ? "date" : "text"}
+                value={
+                  key === "date_created"
+                    ? application[key]!.split("T")[0]
+                    : application[key]!
+                }
+                onChange={(e) => {
+                  handleDataEntry(key, e.target.value, setApplication);
+                  if (
+                    key === "date_created" &&
+                    eventsPreceedDate(e.target.value, application.events)
+                  ) {
+                    setPopupOpen(true);
+                  }
+                }}
+                max={
+                  key === "date_created"
+                    ? new Date(Date.now()).toISOString().split("T")[0]
+                    : undefined
+                }
+              />
+            </div>
+          );
+        })}
+        {editing && <button type="submit">Save</button>}
+      </form>
+      {!editing && (
+        <button type="button" onClick={() => setEditing(true)}>
+          Edit
+        </button>
+      )}
+
+      <Popup open={popupOpen}>
+        <h3>Date conflict</h3>
+        <p>
+          Any events preceeding the selected date will be deleted. <br />
+          Save new date?
+        </p>
+        <button>Save</button>
+        <button onClick={() => setPopupOpen(false)}>Cancel</button>
+      </Popup>
     </section>
   );
 }
