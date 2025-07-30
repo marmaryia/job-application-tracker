@@ -82,7 +82,14 @@ function ApplicationInfoSection({
         onDoubleClick={() => setEditing(true)}
         onSubmit={(e) => {
           e.preventDefault();
-          handleDataUpdate();
+
+          if (
+            !eventsPreceedDate(application.date_created, application.events)
+          ) {
+            handleDataUpdate();
+          } else {
+            setPopupOpen(true);
+          }
         }}
       >
         {keys.map((key, i) => {
@@ -103,12 +110,6 @@ function ApplicationInfoSection({
                 }
                 onChange={(e) => {
                   handleDataEntry(key, e.target.value, setApplication);
-                  if (
-                    key === "date_created" &&
-                    eventsPreceedDate(e.target.value, application.events)
-                  ) {
-                    setPopupOpen(true);
-                  }
                 }}
                 max={
                   key === "date_created"
@@ -131,9 +132,16 @@ function ApplicationInfoSection({
         <h3>Date conflict</h3>
         <p>
           Any events preceeding the selected date will be deleted. <br />
-          Save new date?
+          Save the data with the new date?
         </p>
-        <button>Save</button>
+        <button
+          onClick={() => {
+            handleDataUpdate();
+            setPopupOpen(false);
+          }}
+        >
+          Save
+        </button>
         <button onClick={() => setPopupOpen(false)}>Cancel</button>
       </Popup>
     </section>
