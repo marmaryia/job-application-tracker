@@ -81,6 +81,14 @@ function ApplicationsList() {
         <button onClick={() => setQuery("search", searchString)}>Search</button>
         <button
           onClick={() => {
+            setQuery("search", "");
+            setSearchString("");
+          }}
+        >
+          Clear search results
+        </button>
+        <button
+          onClick={() => {
             setPopupOpen(true);
             setSubmitSuccessful(false);
           }}
