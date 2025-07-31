@@ -19,6 +19,10 @@ function ApplicationsList() {
   const sortByQuery = searchParams.get("sort_by");
   const orderQuery = searchParams.get("order");
   const statusQuery = searchParams.get("status");
+  const searchQuery = searchParams.get("search");
+  const [searchString, setSearchString] = useState<string>(
+    searchQuery ? searchQuery : ""
+  );
 
   function setQuery(queryName: string, value: string) {
     const newParams = new URLSearchParams(searchParams);
@@ -68,8 +72,21 @@ function ApplicationsList() {
         >
           {orderQuery === "desc" || !orderQuery ? "Oldest" : "Newest"} first
         </button>
-        <input type="text" placeholder="Company name or position" />
-        <button>Search</button>
+        <input
+          type="text"
+          placeholder="Company or position"
+          onChange={(event) => setSearchString(event.target.value)}
+          value={searchString}
+        />
+        <button onClick={() => setQuery("search", searchString)}>Search</button>
+        <button
+          onClick={() => {
+            setQuery("search", "");
+            setSearchString("");
+          }}
+        >
+          Clear search results
+        </button>
         <button
           onClick={() => {
             setPopupOpen(true);
@@ -90,6 +107,7 @@ function ApplicationsList() {
         sortBy={sortByQuery}
         order={orderQuery}
         status={statusQuery}
+        search={searchQuery}
         refetchData={refetchData}
       />
     </section>
