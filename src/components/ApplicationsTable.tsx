@@ -9,11 +9,13 @@ function ApplicationsTable({
   sortBy,
   order,
   status,
+  search,
   refetchData,
 }: {
   sortBy: string | null;
   order: string | null;
   status: string | null;
+  search: string | null;
   refetchData: number;
 }) {
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
@@ -31,7 +33,8 @@ function ApplicationsTable({
         loggedInUser!.id,
         sortBy,
         order,
-        status
+        status,
+        search
       );
       setApplicationsData(applications);
     } catch (apiError: any) {
@@ -47,7 +50,7 @@ function ApplicationsTable({
 
   useEffect(() => {
     getApplications();
-  }, [sortBy, order, status, refetchData]);
+  }, [sortBy, order, status, search, refetchData]);
 
   if (error) return <p>There has been an error</p>;
   if (isLoading) return <p>Fetching data</p>;

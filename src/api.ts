@@ -52,7 +52,8 @@ export async function getApplicationsByUserId(
   userId: number,
   sortBy: string | null,
   order: string | null,
-  status: string | null
+  status: string | null,
+  search: string | null
 ) {
   let url = `users/${userId}/applications?sort_by=${
     sortBy ? sortBy : "date_created"
@@ -61,6 +62,11 @@ export async function getApplicationsByUserId(
   if (status) {
     url += `&status=${status}`;
   }
+
+  if (search) {
+    url += `&search=${search}`;
+  }
+
   const {
     data: { applications },
   } = await api.get(url, {
