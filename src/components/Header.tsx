@@ -8,7 +8,10 @@ function Header() {
   const { loggedInUser } = useContext(UserContext);
   return (
     <header>
-      <h1>TRACTION</h1>
+      <Link to="/applications">
+        <h1>TRACTION</h1>
+      </Link>
+
       {!loggedInUser && <Link to="/register">Register</Link>}
       {!loggedInUser && <Link to="/login">Log in</Link>}
       {loggedInUser && <Logout />}

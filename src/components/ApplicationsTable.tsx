@@ -54,8 +54,7 @@ function ApplicationsTable({
 
   if (error) return <p>There has been an error</p>;
   if (isLoading) return <p>Fetching data</p>;
-  if (applicationsData.length === 0)
-    return <p>You do not have any applications yet</p>;
+  if (applicationsData.length === 0) return <p>No application found</p>;
 
   return (
     <table>
