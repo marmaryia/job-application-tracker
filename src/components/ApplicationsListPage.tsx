@@ -32,7 +32,7 @@ function ApplicationsList() {
 
   return (
     <section>
-      <h2>History</h2>
+      <h2>Your applications</h2>
       <div>
         <select
           name="statuses"
