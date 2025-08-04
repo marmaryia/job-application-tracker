@@ -54,47 +54,59 @@ function Register() {
 
   return (
     <section>
-      <form action="submit" onSubmit={registerUser}>
-        <label htmlFor="name">Name</label>
+      <form action="submit" onSubmit={registerUser} className="auth-form">
+        <h2>Register</h2>
+        <label htmlFor="name">Name:</label>
         <input
           type="text"
           id="name"
           value={userData.name}
+          placeholder="Name"
           onChange={(event) => {
             handleDataInput(event.target.value, "name");
           }}
         />
         <br />
-        <label htmlFor="email">Email address</label>
+        <label htmlFor="email">Email address:</label>
         <input
           type="text"
           id="email"
           value={userData.email}
+          placeholder="Email address"
           onChange={(event) => {
             handleDataInput(event.target.value, "email");
           }}
         />
-        {serverError?.duplicateUser && <p>{serverError.message}</p>}
         <br />
-        <label htmlFor="password">Password</label>
+        {serverError?.duplicateUser && (
+          <p className="error-message">{serverError.message}</p>
+        )}
+        <label htmlFor="password">Password:</label>
         <input
           type="password"
           id="password"
           value={userData.password}
+          placeholder="Password"
           onChange={(event) => {
             setInvalidPassword(false);
             handleDataInput(event.target.value, "password");
           }}
         />
         {invalidPassword && (
-          <p>The password must contain at least 8 characters and no spaces</p>
+          <p className="error-message">
+            The password must contain at least 8 characters and no spaces
+          </p>
         )}
         <br />
-        {missingData && <p>Please fill in all the fields</p>}
+        {missingData && (
+          <p className="error-message">Please fill in all the fields</p>
+        )}
         {serverError?.unknownError && (
           <p>Something has gone wrong, please try again</p>
         )}
-        <button type="submit">Sign up</button>
+        <button type="submit" className="auth-button">
+          Sign up
+        </button>
       </form>
     </section>
   );

@@ -60,7 +60,7 @@ function Login() {
         />
         <br />
         {loggingInError?.unknownError && <p>{loggingInError.message}</p>}
-        <button className="login-button">Log in</button>
+        <button className="auth-button">Log in</button>
         {loggingInError?.authenticationError && (
           <p className="error-message">{loggingInError.message}</p>
         )}
