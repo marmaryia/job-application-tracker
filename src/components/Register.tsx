@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, Link } from "react-router-dom";
 
 import { registerNewUser } from "../api";
 import { processServerError } from "../utils/errors";
@@ -107,6 +107,9 @@ function Register() {
         <button type="submit" className="auth-button">
           Sign up
         </button>
+        <p>
+          Already have an account? <Link to="/login">Log in</Link>
+        </p>
       </form>
     </section>
   );
