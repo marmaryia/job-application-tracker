@@ -3,6 +3,7 @@ import "./App.css";
 import "./styles/PopupStyles.css";
 import "./styles/ApplicationPageStyles.css";
 import "./styles/Header.css";
+import "./styles/Login.css";
 
 import Header from "./components/Header";
 import ApplicationsList from "./components/ApplicationsListPage";

@@ -1,9 +1,10 @@
 import { useState, useContext } from "react";
+import { Link, Navigate } from "react-router-dom";
+
 import type { TUserDetails } from "../types/userTypes";
 import { loginUser } from "../api";
 import { UserContext } from "../contexts/userContext";
 import { processLoggingInError } from "../utils/errors";
-import { Navigate } from "react-router-dom";
 import { handleDataEntry } from "../utils/dataEntry";
 
 function Login() {
@@ -32,30 +33,40 @@ function Login() {
 
   return (
     <section>
-      {loggingInError?.authenticationError && <p>{loggingInError.message}</p>}
-      <form action="submit" onSubmit={handleSubmit}>
-        <label htmlFor="email">Email address</label>
+      <form action="submit" onSubmit={handleSubmit} className="auth-form">
+        <h2>Log in</h2>
+
+        <label htmlFor="email">Email address:</label>
         <input
           type="text"
           name="email"
           id="email"
+          placeholder="Email address"
           onChange={(event) => {
             handleDataEntry("email", event.target.value, setUserDetails);
           }}
         />
         <br />
-        <label htmlFor="password">Password</label>
+
+        <label htmlFor="password">Password:</label>
         <input
           type="password"
           name="password"
           id="password"
+          placeholder="Password"
           onChange={(event) => {
             handleDataEntry("password", event.target.value, setUserDetails);
           }}
         />
         <br />
         {loggingInError?.unknownError && <p>{loggingInError.message}</p>}
-        <button>Log in</button>
+        <button className="login-button">Log in</button>
+        {loggingInError?.authenticationError && (
+          <p className="error-message">{loggingInError.message}</p>
+        )}
+        <p>
+          Do not have an account? <Link to="/register">Register</Link>
+        </p>
       </form>
     </section>
   );

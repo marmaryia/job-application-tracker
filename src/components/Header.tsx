@@ -18,8 +18,7 @@ function Header() {
         </Link>
         <h1>TRACTION</h1>
       </div>
-      {!loggedInUser && <Link to="/register">Register</Link>}
-      {!loggedInUser && <Link to="/login">Log in</Link>}
+
       {loggedInUser && <Logout />}
     </header>
   );
