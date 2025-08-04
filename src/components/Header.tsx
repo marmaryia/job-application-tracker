@@ -8,7 +8,16 @@ function Header() {
   const { loggedInUser } = useContext(UserContext);
   return (
     <header>
-      <h1>TRACTION</h1>
+      <div className="name-logo-container">
+        <Link to={"/"}>
+          <img
+            src="logo.svg"
+            alt="figure of a person with a car tire"
+            id="logo-svg"
+          />
+        </Link>
+        <h1>TRACTION</h1>
+      </div>
       {!loggedInUser && <Link to="/register">Register</Link>}
       {!loggedInUser && <Link to="/login">Log in</Link>}
       {loggedInUser && <Logout />}

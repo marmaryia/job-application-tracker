@@ -1,5 +1,7 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { IconButton } from "@mui/material";
 
 import { UserContext } from "../contexts/userContext";
 import { logoutUser } from "../api";
@@ -14,7 +16,13 @@ function Logout() {
     navigate("/login");
   }
 
-  return <button onClick={handleLogout}>Logout</button>;
+  return (
+    <div className="logout-button">
+      <IconButton onClick={handleLogout} size="large">
+        <LogoutIcon sx={{ color: "white" }} fontSize="large" />
+      </IconButton>
+    </div>
+  );
 }
 
 export default Logout;

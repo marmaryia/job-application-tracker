@@ -14,5 +14,10 @@ main {
 }
 
 h1 {
-    margin-top: 0;
+    margin-block: 0;
+    font-size: 75px;
+    font-family: "Tourney", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
 }
