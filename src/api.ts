@@ -55,6 +55,9 @@ export async function getApplicationsByUserId(
   status: string | null,
   search: string | null
 ) {
+  if (sortBy) {
+    sortBy = sortBy === "latest_event" ? "recent_activity" : "date_created";
+  }
   let url = `users/${userId}/applications?sort_by=${
     sortBy ? sortBy : "date_created"
   }&order=${order ? order : "desc"}`;

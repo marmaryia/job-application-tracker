@@ -16,8 +16,7 @@ function ApplicationsList() {
   const [submitSuccessful, setSubmitSuccessful] = useState<boolean>(false);
   const [refetchData, setRefetchData] = useState<number>(0);
   const [searchParams, setSearchParams] = useSearchParams();
-  const sortByQuery = searchParams.get("sort_by");
-  const orderQuery = searchParams.get("order");
+
   const statusQuery = searchParams.get("status");
   const searchQuery = searchParams.get("search");
   const [searchString, setSearchString] = useState<string>(
@@ -48,30 +47,7 @@ function ApplicationsList() {
           <option value="rejected">Rejected</option>
           <option value="archived">Archived</option>
         </select>
-        <button
-          value="date_created"
-          onClick={(event) => {
-            setQuery("sort_by", event.currentTarget.value);
-          }}
-        >
-          Sort by application date
-        </button>
-        <button
-          value="recent_activity"
-          onClick={(event) => {
-            setQuery("sort_by", event.currentTarget.value);
-          }}
-        >
-          Sort by last activity date
-        </button>
-        <button
-          value={orderQuery === "asc" ? "desc" : "asc"}
-          onClick={(event) => {
-            setQuery("order", event.currentTarget.value);
-          }}
-        >
-          {orderQuery === "desc" || !orderQuery ? "Oldest" : "Newest"} first
-        </button>
+
         <input
           type="text"
           placeholder="Company or position"
@@ -104,8 +80,6 @@ function ApplicationsList() {
         />
       </div>
       <ApplicationsTable
-        sortBy={sortByQuery}
-        order={orderQuery}
         status={statusQuery}
         search={searchQuery}
         refetchData={refetchData}

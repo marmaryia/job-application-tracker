@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import type { TApplication } from "../types/applicationTypes";
 import { UserContext } from "../contexts/userContext";
@@ -11,19 +11,17 @@ import {
   type GridRenderCellParams,
   type GridRowParams,
   type MuiEvent,
+  type GridSortModel,
+  type GridSortDirection,
 } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import LaunchIcon from "@mui/icons-material/Launch";
 
 function ApplicationsTable({
-  sortBy,
-  order,
   status,
   search,
   refetchData,
 }: {
-  sortBy: string | null;
-  order: string | null;
   status: string | null;
   search: string | null;
   refetchData: number;
@@ -33,12 +31,18 @@ function ApplicationsTable({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sortByQuery = searchParams.get("sort_by");
+  const orderQuery = searchParams.get("order");
+  const [sortModel, setSortModel] = useState<GridSortModel>([
+    { field: sortByQuery || "", sort: orderQuery as GridSortDirection },
+  ]);
 
   const columns = [
     {
       field: "application_id",
       headerName: "ID",
-      width: 90,
+      width: 70,
       sortable: false,
       editable: false,
       renderCell: (params: GridRenderCellParams<any, any, any>) => {
@@ -111,8 +115,8 @@ function ApplicationsTable({
       const applications = await getApplicationsByUserId(
         loggedInUser!.accessToken,
         loggedInUser!.id,
-        sortBy,
-        order,
+        sortModel[0]?.field || null,
+        (sortModel[0]?.sort as string) || null,
         status,
         search
       );
@@ -128,12 +132,26 @@ function ApplicationsTable({
     }
   }
 
+  function handleSortModelChange(model: GridSortModel) {
+    setSortModel(model);
+
+    const newParams = new URLSearchParams(searchParams);
+    if (model[0]) {
+      newParams.set("sort_by", model[0].field);
+      newParams.set("order", model[0].sort as string);
+    } else {
+      newParams.delete("sort_by");
+      newParams.delete("order");
+    }
+    setSearchParams(newParams);
+  }
+
   useEffect(() => {
     getApplications();
-  }, [sortBy, order, status, search, refetchData]);
+  }, [sortModel, status, search, refetchData]);
 
   if (error) return <p>There has been an error</p>;
-  // if (isLoading) return <p>Fetching data</p>;
+  if (isLoading) return <p>Fetching data</p>;
   if (applicationsData.length === 0)
     return <p>You do not have any applications yet</p>;
 
@@ -144,14 +162,7 @@ function ApplicationsTable({
           <DataGrid
             rows={applicationsData}
             columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 50,
-                },
-              },
-            }}
-            pageSizeOptions={[50]}
+            sortingMode="server"
             getRowId={(application) => application.application_id}
             disableColumnMenu
             hideFooter
@@ -165,6 +176,8 @@ function ApplicationsTable({
               params: GridRowParams,
               _: MuiEvent<React.MouseEvent>
             ) => navigate(`/applications/${params.row.application_id}`)}
+            sortModel={sortModel}
+            onSortModelChange={handleSortModelChange}
           />
         </div>
       </Box>
