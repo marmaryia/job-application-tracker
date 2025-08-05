@@ -5,6 +5,7 @@ import type { TApplication } from "../types/applicationTypes";
 import { UserContext } from "../contexts/userContext";
 import { getApplicationsByUserId } from "../api";
 import { formatIsoTimestamp } from "../utils/dates";
+import StatusSelect from "./StatusSelect";
 
 import {
   DataGrid,
@@ -78,6 +79,14 @@ function ApplicationsTable({
       headerName: "Status",
       sortable: false,
       flex: 1,
+      renderCell: (params: GridRenderCellParams<any, any, any>) => {
+        return (
+          <StatusSelect
+            application={params.row}
+            setApplications={setApplicationsData}
+          />
+        );
+      },
     },
     {
       field: "latest_event",
@@ -168,9 +177,10 @@ function ApplicationsTable({
             hideFooter
             loading={isLoading}
             sx={{
-              ".MuiDataGrid-cell:focus, .MuiDataGrid-columnHeader:focus": {
-                outline: "none",
-              },
+              ".MuiDataGrid-cell:focus, .MuiDataGrid-columnHeader:focus, .MuiDataGrid-cell:focus-within":
+                {
+                  outline: "none",
+                },
             }}
             onRowDoubleClick={(
               params: GridRowParams,

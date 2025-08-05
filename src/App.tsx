@@ -5,6 +5,8 @@ import "./styles/ApplicationPageStyles.css";
 import "./styles/Header.css";
 import "./styles/Login.css";
 
+import "./styles/ApplicationsList.css";
+
 import Header from "./components/Header";
 import ApplicationsList from "./components/ApplicationsListPage";
 import ApplicationPage from "./components/ApplicationPage";

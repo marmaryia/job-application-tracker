@@ -30,7 +30,7 @@ function ApplicationsList() {
   }
 
   return (
-    <section>
+    <section className="all-applications-section">
       <h2>Your applications</h2>
       <div>
         <select
