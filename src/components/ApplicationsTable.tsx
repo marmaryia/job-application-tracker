@@ -1,14 +1,19 @@
 import { useEffect, useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import type { TApplication } from "../types/applicationTypes";
 import { UserContext } from "../contexts/userContext";
 import { getApplicationsByUserId } from "../api";
-import ApplicationsTableRow from "./ApplicationsTableRow";
-import { useNavigate } from "react-router-dom";
 import { formatIsoTimestamp } from "../utils/dates";
 
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  type GridRenderCellParams,
+  type GridRowParams,
+  type MuiEvent,
+} from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
+import LaunchIcon from "@mui/icons-material/Launch";
 
 function ApplicationsTable({
   sortBy,
@@ -30,23 +35,36 @@ function ApplicationsTable({
   const navigate = useNavigate();
 
   const columns = [
-    { field: "application_id", headerName: "ID", width: 90 },
+    {
+      field: "application_id",
+      headerName: "ID",
+      width: 90,
+      sortable: false,
+      editable: false,
+      renderCell: (params: GridRenderCellParams<any, any, any>) => {
+        const allRowIds = params.api.getAllRowIds();
+        const index = allRowIds.indexOf(params.id);
+        return <span>{index + 1}</span>;
+      },
+    },
     {
       field: "company",
       headerName: "Company",
-      width: 150,
+      flex: 1,
       editable: false,
+      sortable: false,
     },
     {
       field: "position",
       headerName: "Position",
-      width: 150,
+      flex: 1,
       editable: false,
+      sortable: false,
     },
     {
       field: "date_created",
       headerName: "Date Applied",
-      width: 110,
+      flex: 1,
       editable: false,
       valueGetter: (_: any, application: TApplication) =>
         formatIsoTimestamp(application.date_created, true),
@@ -55,17 +73,34 @@ function ApplicationsTable({
       field: "status",
       headerName: "Status",
       sortable: false,
-      width: 160,
+      flex: 1,
     },
     {
       field: "latest_event",
       headerName: "Recent Activity",
       editable: false,
-      width: 160,
+      flex: 2,
       valueGetter: (_: any, application: TApplication) =>
         `${formatIsoTimestamp(application.latest_event.date, true)}: ${
           application.latest_event.title
         }`,
+    },
+    {
+      field: "job_url",
+      headerName: "Link",
+      sortable: false,
+      width: 90,
+      renderCell: (params: GridRenderCellParams<any, any, any>) => {
+        if (!params.value) return null;
+        const href = params.value?.startsWith("http")
+          ? params.value
+          : `https://${params.value}`;
+        return (
+          <a href={href} target="_blank">
+            <LaunchIcon fontSize="small" />
+          </a>
+        );
+      },
     },
   ];
 
@@ -104,7 +139,7 @@ function ApplicationsTable({
 
   return (
     <>
-      <Box sx={{ height: 400, width: "100%" }}>
+      <Box sx={{ height: "100%", width: "100%" }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <DataGrid
             rows={applicationsData}
@@ -121,36 +156,18 @@ function ApplicationsTable({
             disableColumnMenu
             hideFooter
             loading={isLoading}
-            // onRowClick={navigate to application}
+            sx={{
+              ".MuiDataGrid-cell:focus, .MuiDataGrid-columnHeader:focus": {
+                outline: "none",
+              },
+            }}
+            onRowDoubleClick={(
+              params: GridRowParams,
+              _: MuiEvent<React.MouseEvent>
+            ) => navigate(`/applications/${params.row.application_id}`)}
           />
         </div>
       </Box>
-
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Company</th>
-            <th>Position</th>
-            <th>Date applied</th>
-            <th>Status</th>
-            <th>Recent</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {applicationsData.map((application: TApplication, i) => {
-            return (
-              <ApplicationsTableRow
-                application={application}
-                key={application.application_id}
-                serialId={i + 1}
-                setError={setError}
-              />
-            );
-          })}
-        </tbody>
-      </table>
     </>
   );
 }
