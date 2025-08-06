@@ -10,6 +10,8 @@ import type {
 } from "../types/applicationTypes";
 import { postNewApplication } from "../api";
 import { formatIsoTimestamp } from "../utils/dates";
+import { Box, Button, FormControl, MenuItem, Select } from "@mui/material";
+import { type SelectChangeEvent } from "@mui/material/Select";
 
 function NewApplicationForm({
   setSubmitSuccessful,
@@ -48,7 +50,6 @@ function NewApplicationForm({
   }
 
   async function overrideDuplicate() {
-    setDuplicateApplications(undefined);
     const data = { ...applicationData, allow_duplicates: true };
 
     try {
@@ -57,19 +58,26 @@ function NewApplicationForm({
     } catch (error: any) {
       setError(true);
     }
+    setDuplicateApplications(undefined);
   }
 
   if (duplicateApplications) {
     return (
       <div>
-        <h2>Duplicate application</h2>
-        <p>You have already applied for a job (jobs) at this URL:</p>
+        <h3>Duplicate application</h3>
+        <p className="popup-text">
+          You have already applied for a job (jobs) at this URL:
+        </p>
         <ul>
           {duplicateApplications.map(
             (application: TDuplicateApplication, i) => {
               return (
-                <li key={i}>
-                  <Link to={`${application.application_id}`}>
+                <li key={i} className="popup-text">
+                  <Link
+                    to={`${application.application_id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {application.position} at {application.company} on{" "}
                     {formatIsoTimestamp(application.date_created, true)}
                   </Link>
@@ -78,21 +86,56 @@ function NewApplicationForm({
             }
           )}
         </ul>
-        <p>
+        <p className="popup-text">
           Do you want to add another one anyway? Click on an existing one to go
-          to view it 
+          to view it
         </p>
-        <button onClick={() => setDuplicateApplications(undefined)}>Edit</button>
-        <button onClick={overrideDuplicate}>Add anyway</button>
-        <button onClick={() => setPopupOpen(false)}>Cancel</button>
+        <Button
+          onClick={() => setDuplicateApplications(undefined)}
+          variant="contained"
+          sx={{
+            backgroundColor: "var(--accent-color)",
+            color: "black",
+            marginRight: "1em",
+            marginTop: "1em",
+          }}
+        >
+          Edit
+        </Button>
+        <Button
+          onClick={overrideDuplicate}
+          variant="contained"
+          sx={{
+            backgroundColor: "var(--accent-color)",
+            color: "black",
+            marginRight: "1em",
+            marginTop: "1em",
+          }}
+        >
+          Add anyway
+        </Button>
+        <Button
+          onClick={() => setPopupOpen(false)}
+          variant="outlined"
+          sx={{
+            borderColor: "var(--accent-color)",
+            color: "white",
+            marginRight: "1em",
+            marginTop: "1em",
+          }}
+        >
+          Cancel
+        </Button>
       </div>
     );
   }
 
   return (
     <form action="submit" onSubmit={handleFromSubmit}>
-      <h2>New application</h2>
-      <label htmlFor="company-name">Company*</label>
+      <h3>New application</h3>
+      <label htmlFor="company-name" className="new-app-form-label">
+        Company *
+      </label>
       <input
         required
         type="text"
@@ -103,7 +146,9 @@ function NewApplicationForm({
         value={applicationData?.company}
       />
       <br />
-      <label htmlFor="position">Position*</label>
+      <label htmlFor="position" className="new-app-form-label">
+        Position *
+      </label>
       <input
         required
         type="text"
@@ -114,7 +159,9 @@ function NewApplicationForm({
         value={applicationData?.position}
       />
       <br />
-      <label htmlFor="listing-link">Link to listing</label>
+      <label htmlFor="listing-link" className="new-app-form-label">
+        Link to listing
+      </label>
       <input
         type="text"
         id="listing-link"
@@ -124,26 +171,32 @@ function NewApplicationForm({
         value={applicationData.job_url}
       />
       <br />
-      <label htmlFor="statuses">Status*</label>
-      <select
-        name="statuses"
-        id="statuses"
-        onChange={(event) =>
-          handleDataEntry("status", event.target.value, setApplicationData)
-        }
-        value={applicationData.status}
-      >
-        <option value="" disabled></option>
-        {statuses.map((status, i) => {
-          return (
-            <option key={i} value={status}>
-              {status}
-            </option>
-          );
-        })}
-      </select>
+      <label htmlFor="statuses" className="new-app-form-label">
+        Status *
+      </label>
+      <Box sx={{ minWidth: 120 }}>
+        <FormControl fullWidth>
+          <Select
+            id="status-select"
+            value={applicationData.status}
+            onChange={(event: SelectChangeEvent) =>
+              handleDataEntry("status", event.target.value, setApplicationData)
+            }
+            sx={{ backgroundColor: "white" }}
+          >
+            {statuses.map((statusOption, i) => (
+              <MenuItem value={statusOption} key={i}>
+                {statusOption}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
       <br />
-      <label htmlFor="date-submitted">Date submitted*</label>
+      <label htmlFor="date-submitted" className="new-app-form-label">
+        Date submitted *
+      </label>
+      <br />
       <input
         required
         type="date"
@@ -159,9 +212,11 @@ function NewApplicationForm({
         max={new Date(Date.now()).toISOString().split("T")[0]}
       />
       <br />
-      <label htmlFor="notes">Notes</label>
-      <input
-        type="text"
+      <label htmlFor="notes" className="new-app-form-label">
+        Notes
+      </label>
+      <textarea
+        rows={3}
         id="notes"
         onChange={(event) =>
           handleDataEntry("notes", event.target.value, setApplicationData)
@@ -171,10 +226,28 @@ function NewApplicationForm({
 
       <br />
       {error && <p>There has been an error, please try again</p>}
-      <button type="submit">Submit</button>
-      <button type="button" onClick={() => setPopupOpen(false)}>
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{
+          backgroundColor: "var(--accent-color)",
+          color: "black",
+          marginRight: "1em",
+        }}
+      >
+        Submit
+      </Button>
+      <Button
+        type="button"
+        onClick={() => setPopupOpen(false)}
+        variant="outlined"
+        sx={{
+          borderColor: "var(--accent-color)",
+          color: "var(--accent-color)",
+        }}
+      >
         Cancel
-      </button>
+      </Button>
     </form>
   );
 }
