@@ -1,10 +1,12 @@
 import { useState, useContext } from "react";
+import { Link, Navigate, useLocation } from "react-router-dom";
+
 import type { TUserDetails } from "../types/userTypes";
 import { loginUser } from "../api";
 import { UserContext } from "../contexts/userContext";
 import { processLoggingInError } from "../utils/errors";
-import { Navigate } from "react-router-dom";
 import { handleDataEntry } from "../utils/dataEntry";
+import { Box, Button } from "@mui/material";
 
 function Login() {
   const [userDetails, setUserDetails] = useState<TUserDetails>({
@@ -13,6 +15,8 @@ function Login() {
   });
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
   const [loggingInError, setLoggingInError] = useState<any>(null);
+  const location = useLocation();
+  const from = location.state?.from;
 
   if (loggedInUser) {
     return <Navigate to="/applications" />;
@@ -32,30 +36,62 @@ function Login() {
 
   return (
     <section>
-      {loggingInError?.authenticationError && <p>{loggingInError.message}</p>}
-      <form action="submit" onSubmit={handleSubmit}>
-        <label htmlFor="email">Email address</label>
+      <form action="submit" onSubmit={handleSubmit} className="auth-form">
+        {from === "/register" ? (
+          <div>
+            <h3>Registration successful!</h3>
+            <p className="info-message">Please log in now.</p>
+          </div>
+        ) : (
+          <h2>Log in</h2>
+        )}
+
+        <label htmlFor="email">Email address:</label>
         <input
           type="text"
           name="email"
           id="email"
+          placeholder="Email address"
           onChange={(event) => {
             handleDataEntry("email", event.target.value, setUserDetails);
           }}
         />
         <br />
-        <label htmlFor="password">Password</label>
+
+        <label htmlFor="password">Password:</label>
         <input
           type="password"
           name="password"
           id="password"
+          placeholder="Password"
           onChange={(event) => {
             handleDataEntry("password", event.target.value, setUserDetails);
           }}
         />
         <br />
         {loggingInError?.unknownError && <p>{loggingInError.message}</p>}
-        <button>Log in</button>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              backgroundColor: "var(--accent-color)",
+              color: "black",
+
+              marginTop: "1em",
+            }}
+            size="large"
+          >
+            Log in
+          </Button>
+        </Box>
+
+        {loggingInError?.authenticationError && (
+          <p className="error-message">{loggingInError.message}</p>
+        )}
+        <p>
+          Do not have an account? <Link to="/register">Register</Link>
+        </p>
       </form>
     </section>
   );

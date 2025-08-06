@@ -4,6 +4,9 @@ import { Navigate, useSearchParams } from "react-router-dom";
 import { UserContext } from "../contexts/userContext";
 import ApplicationsTable from "./ApplicationsTable";
 import NewApplicationPopup from "./NewApplicationPopup";
+import FilterByStatus from "./FilterByStatus";
+import ApplicationSearch from "./ApplicationSearch";
+import { Button } from "@mui/material";
 
 function ApplicationsList() {
   const { loggedInUser } = useContext(UserContext);
@@ -16,13 +19,9 @@ function ApplicationsList() {
   const [submitSuccessful, setSubmitSuccessful] = useState<boolean>(false);
   const [refetchData, setRefetchData] = useState<number>(0);
   const [searchParams, setSearchParams] = useSearchParams();
-  const sortByQuery = searchParams.get("sort_by");
-  const orderQuery = searchParams.get("order");
+
   const statusQuery = searchParams.get("status");
   const searchQuery = searchParams.get("search");
-  const [searchString, setSearchString] = useState<string>(
-    searchQuery ? searchQuery : ""
-  );
 
   function setQuery(queryName: string, value: string) {
     const newParams = new URLSearchParams(searchParams);
@@ -31,81 +30,34 @@ function ApplicationsList() {
   }
 
   return (
-    <section>
-      <h2>History</h2>
-      <div>
-        <select
-          name="statuses"
-          id="statuses"
-          value={statusQuery ? statusQuery : "All"}
-          onChange={(event) => {
-            setQuery("status", event.target.value);
-          }}
-        >
-          <option value="" disabled></option>
-          <option value="">All</option>
-          <option value="active">Active</option>
-          <option value="rejected">Rejected</option>
-          <option value="archived">Archived</option>
-        </select>
-        <button
-          value="date_created"
-          onClick={(event) => {
-            setQuery("sort_by", event.currentTarget.value);
-          }}
-        >
-          Sort by application date
-        </button>
-        <button
-          value="recent_activity"
-          onClick={(event) => {
-            setQuery("sort_by", event.currentTarget.value);
-          }}
-        >
-          Sort by last activity date
-        </button>
-        <button
-          value={orderQuery === "asc" ? "desc" : "asc"}
-          onClick={(event) => {
-            setQuery("order", event.currentTarget.value);
-          }}
-        >
-          {orderQuery === "desc" || !orderQuery ? "Oldest" : "Newest"} first
-        </button>
-        <input
-          type="text"
-          placeholder="Company or position"
-          onChange={(event) => setSearchString(event.target.value)}
-          value={searchString}
-        />
-        <button onClick={() => setQuery("search", searchString)}>Search</button>
-        <button
-          onClick={() => {
-            setQuery("search", "");
-            setSearchString("");
-          }}
-        >
-          Clear search results
-        </button>
-        <button
+    <section className="all-applications-section">
+      <div className="applications-list-header">
+        <h2>Your applications</h2>
+        <Button
+          variant="contained"
           onClick={() => {
             setPopupOpen(true);
             setSubmitSuccessful(false);
           }}
+          sx={{ backgroundColor: "var(--accent-color)", color: "black" }}
+          size="large"
         >
-          New application
-        </button>
-        <NewApplicationPopup
-          popupOpen={popupOpen}
-          setPopupOpen={setPopupOpen}
-          submitSuccessful={submitSuccessful}
-          setSubmitSuccessful={setSubmitSuccessful}
-          setRefetchData={setRefetchData}
-        />
+          Add new
+        </Button>
       </div>
+      <div className="table-nav-container">
+        <FilterByStatus statusQuery={statusQuery} setStatusQuery={setQuery} />
+        <ApplicationSearch setQuery={setQuery} searchQuery={searchQuery} />
+      </div>
+
+      <NewApplicationPopup
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        submitSuccessful={submitSuccessful}
+        setSubmitSuccessful={setSubmitSuccessful}
+        setRefetchData={setRefetchData}
+      />
       <ApplicationsTable
-        sortBy={sortByQuery}
-        order={orderQuery}
         status={statusQuery}
         search={searchQuery}
         refetchData={refetchData}

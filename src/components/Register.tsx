@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, Link } from "react-router-dom";
 
 import { registerNewUser } from "../api";
 import { processServerError } from "../utils/errors";
@@ -7,6 +7,7 @@ import { validatePassword } from "../utils/validators";
 import type { TNewUserDetails } from "../types/userTypes";
 import { UserContext } from "../contexts/userContext";
 import { handleDataEntry } from "../utils/dataEntry";
+import { Box, Button } from "@mui/material";
 
 function Register() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ function Register() {
     ) {
       try {
         await registerNewUser(userData);
-        navigate("/login");
+        navigate("/login", { state: { from: location.pathname } });
       } catch (error: any) {
         setServerError(processServerError(error));
         if (serverError?.unknownError) {
@@ -54,47 +55,74 @@ function Register() {
 
   return (
     <section>
-      <form action="submit" onSubmit={registerUser}>
-        <label htmlFor="name">Name</label>
+      <form action="submit" onSubmit={registerUser} className="auth-form">
+        <h2>Register</h2>
+        <label htmlFor="name">Name:</label>
         <input
           type="text"
           id="name"
           value={userData.name}
+          placeholder="Name"
           onChange={(event) => {
             handleDataInput(event.target.value, "name");
           }}
         />
         <br />
-        <label htmlFor="email">Email address</label>
+        <label htmlFor="email">Email address:</label>
         <input
           type="text"
           id="email"
           value={userData.email}
+          placeholder="Email address"
           onChange={(event) => {
             handleDataInput(event.target.value, "email");
           }}
         />
-        {serverError?.duplicateUser && <p>{serverError.message}</p>}
         <br />
-        <label htmlFor="password">Password</label>
+        {serverError?.duplicateUser && (
+          <p className="error-message">{serverError.message}</p>
+        )}
+        <label htmlFor="password">Password:</label>
         <input
           type="password"
           id="password"
           value={userData.password}
+          placeholder="Password"
           onChange={(event) => {
             setInvalidPassword(false);
             handleDataInput(event.target.value, "password");
           }}
         />
         {invalidPassword && (
-          <p>The password must contain at least 8 characters and no spaces</p>
+          <p className="error-message">
+            The password must contain at least 8 characters and no spaces
+          </p>
         )}
         <br />
-        {missingData && <p>Please fill in all the fields</p>}
+        {missingData && (
+          <p className="error-message">Please fill in all the fields</p>
+        )}
         {serverError?.unknownError && (
           <p>Something has gone wrong, please try again</p>
         )}
-        <button type="submit">Sign up</button>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              backgroundColor: "var(--accent-color)",
+              color: "black",
+
+              marginTop: "1em",
+            }}
+            size="large"
+          >
+            Sign up
+          </Button>
+        </Box>
+        <p>
+          Already have an account? <Link to="/login">Log in</Link>
+        </p>
       </form>
     </section>
   );

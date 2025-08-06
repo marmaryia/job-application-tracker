@@ -1,0 +1,41 @@
+header {
+    margin: 0;
+    padding-block: 2em;
+    width: 100%; 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#logo-svg {
+    height: 100px;
+    padding-inline: 2em;
+}
+
+.name-logo-container{
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+}
+
+.logout-button{
+   padding: 0;
+   background-color: transparent;
+   margin-inline: 2em;
+}
+
+footer{
+    margin: 0;
+    padding-block: 1em;
+    width: 100%; 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+footer a{
+    display: flex;
+    align-items: center;  
+    justify-content: center;
+    font-size: 1.25em;
+}

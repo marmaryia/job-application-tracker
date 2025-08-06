@@ -1,6 +1,7 @@
 import Popup from "reactjs-popup";
 
 import NewApplicationForm from "./NewApplicationForm";
+import { Button } from "@mui/material";
 
 function NewApplicationPopup({
   popupOpen,
@@ -24,23 +25,37 @@ function NewApplicationPopup({
     >
       {submitSuccessful ? (
         <div>
-          <p>Application added successfully</p>
-          <button
+          <h3>Application added successfully</h3>
+          <Button
             onClick={() => {
               setRefetchData((current: number) => ++current);
               setPopupOpen(false);
             }}
+            variant="contained"
+            sx={{
+              backgroundColor: "var(--accent-color)",
+              color: "black",
+              marginRight: "1em",
+              marginTop: "1em",
+            }}
           >
             OK
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => {
               setRefetchData((current: number) => ++current);
               setSubmitSuccessful(false);
             }}
+            variant="contained"
+            sx={{
+              backgroundColor: "var(--accent-color)",
+              color: "black",
+              marginRight: "1em",
+              marginTop: "1em",
+            }}
           >
             New application
-          </button>
+          </Button>
         </div>
       ) : (
         <NewApplicationForm

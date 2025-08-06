@@ -1,0 +1,17 @@
+.all-applications-section{
+    width: 80%
+}
+
+.table-nav-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-block: 1em;
+}
+
+.applications-list-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}

@@ -1,0 +1,19 @@
+.auth-form {
+    border: 3px solid var(--text-color-primary);
+    border-radius: 50px;
+    padding-inline: 4em;
+    padding-block: 2em;
+}
+
+
+.error-message{
+    font-style: italic;
+    border: 3px solid #A52422;
+    border-radius: 5px;
+    padding: 0.5em;
+}
+
+.info-message {
+font-style: italic;
+font-size: 1.5em;
+}
