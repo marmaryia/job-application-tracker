@@ -39,7 +39,7 @@ function Register() {
     ) {
       try {
         await registerNewUser(userData);
-        navigate("/login");
+        navigate("/login", { state: { from: location.pathname } });
       } catch (error: any) {
         setServerError(processServerError(error));
         if (serverError?.unknownError) {

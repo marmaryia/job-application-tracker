@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 
 import type { TUserDetails } from "../types/userTypes";
 import { loginUser } from "../api";
@@ -15,6 +15,8 @@ function Login() {
   });
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
   const [loggingInError, setLoggingInError] = useState<any>(null);
+  const location = useLocation();
+  const from = location.state?.from;
 
   if (loggedInUser) {
     return <Navigate to="/applications" />;
@@ -35,7 +37,14 @@ function Login() {
   return (
     <section>
       <form action="submit" onSubmit={handleSubmit} className="auth-form">
-        <h2>Log in</h2>
+        {from === "/register" ? (
+          <div>
+            <h3>Registration successful!</h3>
+            <p className="info-message">Please log in now.</p>
+          </div>
+        ) : (
+          <h2>Log in</h2>
+        )}
 
         <label htmlFor="email">Email address:</label>
         <input

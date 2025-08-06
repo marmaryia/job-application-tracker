@@ -12,3 +12,8 @@
     border-radius: 5px;
     padding: 0.5em;
 }
+
+.info-message {
+font-style: italic;
+font-size: 1.5em;
+}
