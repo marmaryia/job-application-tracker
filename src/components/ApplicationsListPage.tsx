@@ -5,6 +5,7 @@ import { UserContext } from "../contexts/userContext";
 import ApplicationsTable from "./ApplicationsTable";
 import NewApplicationPopup from "./NewApplicationPopup";
 import FilterByStatus from "./FilterByStatus";
+import ApplicationSearch from "./ApplicationSearch";
 
 function ApplicationsList() {
   const { loggedInUser } = useContext(UserContext);
@@ -33,10 +34,10 @@ function ApplicationsList() {
   return (
     <section className="all-applications-section">
       <h2>Your applications</h2>
-      <div>
+      <div className="table-nav-container">
         <FilterByStatus statusQuery={statusQuery} setStatusQuery={setQuery} />
 
-        <input
+        {/* <input
           type="text"
           placeholder="Company or position"
           onChange={(event) => setSearchString(event.target.value)}
@@ -50,23 +51,25 @@ function ApplicationsList() {
           }}
         >
           Clear search results
-        </button>
-        <button
-          onClick={() => {
-            setPopupOpen(true);
-            setSubmitSuccessful(false);
-          }}
-        >
-          New application
-        </button>
-        <NewApplicationPopup
-          popupOpen={popupOpen}
-          setPopupOpen={setPopupOpen}
-          submitSuccessful={submitSuccessful}
-          setSubmitSuccessful={setSubmitSuccessful}
-          setRefetchData={setRefetchData}
-        />
+        </button> */}
+
+        <ApplicationSearch setQuery={setQuery} searchQuery={searchQuery} />
       </div>
+      <button
+        onClick={() => {
+          setPopupOpen(true);
+          setSubmitSuccessful(false);
+        }}
+      >
+        New application
+      </button>
+      <NewApplicationPopup
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        submitSuccessful={submitSuccessful}
+        setSubmitSuccessful={setSubmitSuccessful}
+        setRefetchData={setRefetchData}
+      />
       <ApplicationsTable
         status={statusQuery}
         search={searchQuery}

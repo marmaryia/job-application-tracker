@@ -28,6 +28,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 const buttonStyles = {
   backgroundColor: "var(--text-color-primary)",
   color: "black",
+
   "&.Mui-selected": {
     backgroundColor: "var(--accent-color)",
     color: "black",
@@ -48,12 +49,19 @@ export default function FilterByStatus({
   return (
     <StyledToggleButtonGroup
       color="primary"
-      value={statusQuery}
+      value={statusQuery ? statusQuery : ""}
       exclusive
       onChange={handleChange}
       aria-label="Platform"
+      sx={{
+        alignItems: "center",
+      }}
     >
-      <ToggleButton value="" sx={buttonStyles}>
+      <ToggleButton
+        value=""
+        sx={buttonStyles}
+        classes={!statusQuery && "Mui-selected"}
+      >
         All
       </ToggleButton>
       <ToggleButton value="active" sx={buttonStyles}>
