@@ -4,6 +4,7 @@ import { Navigate, useSearchParams } from "react-router-dom";
 import { UserContext } from "../contexts/userContext";
 import ApplicationsTable from "./ApplicationsTable";
 import NewApplicationPopup from "./NewApplicationPopup";
+import FilterByStatus from "./FilterByStatus";
 
 function ApplicationsList() {
   const { loggedInUser } = useContext(UserContext);
@@ -33,20 +34,7 @@ function ApplicationsList() {
     <section className="all-applications-section">
       <h2>Your applications</h2>
       <div>
-        <select
-          name="statuses"
-          id="statuses"
-          value={statusQuery ? statusQuery : "All"}
-          onChange={(event) => {
-            setQuery("status", event.target.value);
-          }}
-        >
-          <option value="" disabled></option>
-          <option value="">All</option>
-          <option value="active">Active</option>
-          <option value="rejected">Rejected</option>
-          <option value="archived">Archived</option>
-        </select>
+        <FilterByStatus statusQuery={statusQuery} setStatusQuery={setQuery} />
 
         <input
           type="text"

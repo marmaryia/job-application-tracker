@@ -8,7 +8,7 @@ import { patchApplicationStatus } from "../api";
 import { useContext } from "react";
 import { UserContext } from "../contexts/userContext";
 
-export default function BasicSelect({
+export default function StatusSelect({
   application,
   setApplications,
 }: {
