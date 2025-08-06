@@ -6,6 +6,7 @@ import ApplicationsTable from "./ApplicationsTable";
 import NewApplicationPopup from "./NewApplicationPopup";
 import FilterByStatus from "./FilterByStatus";
 import ApplicationSearch from "./ApplicationSearch";
+import { Button } from "@mui/material";
 
 function ApplicationsList() {
   const { loggedInUser } = useContext(UserContext);
@@ -21,9 +22,6 @@ function ApplicationsList() {
 
   const statusQuery = searchParams.get("status");
   const searchQuery = searchParams.get("search");
-  const [searchString, setSearchString] = useState<string>(
-    searchQuery ? searchQuery : ""
-  );
 
   function setQuery(queryName: string, value: string) {
     const newParams = new URLSearchParams(searchParams);
@@ -33,36 +31,25 @@ function ApplicationsList() {
 
   return (
     <section className="all-applications-section">
-      <h2>Your applications</h2>
+      <div className="applications-list-header">
+        <h2>Your applications</h2>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setPopupOpen(true);
+            setSubmitSuccessful(false);
+          }}
+          sx={{ backgroundColor: "var(--accent-color)", color: "black" }}
+          size="large"
+        >
+          Add new
+        </Button>
+      </div>
       <div className="table-nav-container">
         <FilterByStatus statusQuery={statusQuery} setStatusQuery={setQuery} />
-
-        {/* <input
-          type="text"
-          placeholder="Company or position"
-          onChange={(event) => setSearchString(event.target.value)}
-          value={searchString}
-        />
-        <button onClick={() => setQuery("search", searchString)}>Search</button>
-        <button
-          onClick={() => {
-            setQuery("search", "");
-            setSearchString("");
-          }}
-        >
-          Clear search results
-        </button> */}
-
         <ApplicationSearch setQuery={setQuery} searchQuery={searchQuery} />
       </div>
-      <button
-        onClick={() => {
-          setPopupOpen(true);
-          setSubmitSuccessful(false);
-        }}
-      >
-        New application
-      </button>
+
       <NewApplicationPopup
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}

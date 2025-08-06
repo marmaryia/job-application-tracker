@@ -33,6 +33,15 @@ const buttonStyles = {
     backgroundColor: "var(--accent-color)",
     color: "black",
   },
+
+  "&:hover": {
+    backgroundColor: "grey",
+    color: "white",
+  },
+  "&.Mui-selected:hover": {
+    backgroundColor: "grey",
+    color: "white",
+  },
 };
 
 export default function FilterByStatus({
@@ -61,16 +70,17 @@ export default function FilterByStatus({
         value=""
         sx={buttonStyles}
         classes={!statusQuery && "Mui-selected"}
+        size="small"
       >
         All
       </ToggleButton>
-      <ToggleButton value="active" sx={buttonStyles}>
+      <ToggleButton value="active" sx={buttonStyles} size="small">
         Active
       </ToggleButton>
-      <ToggleButton value="rejected" sx={buttonStyles}>
+      <ToggleButton value="rejected" sx={buttonStyles} size="small">
         Rejected
       </ToggleButton>
-      <ToggleButton value="archived" sx={buttonStyles}>
+      <ToggleButton value="archived" sx={buttonStyles} size="small">
         Archived
       </ToggleButton>
     </StyledToggleButtonGroup>

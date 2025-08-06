@@ -180,6 +180,12 @@ function ApplicationsTable({
                 {
                   outline: "none",
                 },
+              fontSize: "1rem",
+              "& .MuiDataGrid-columnHeaders, & .MuiDataGrid-columnHeader": {
+                backgroundColor: "#f5f5f5",
+                fontWeight: "bold",
+                fontSize: "1.1rem",
+              },
             }}
             onRowDoubleClick={(
               params: GridRowParams,
