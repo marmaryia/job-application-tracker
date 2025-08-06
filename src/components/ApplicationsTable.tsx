@@ -159,9 +159,8 @@ function ApplicationsTable({
     getApplications();
   }, [sortModel, status, search, refetchData]);
 
-  if (error) return <p>There has been an error</p>;
-  if (applicationsData.length === 0)
-    return <p>You do not have any applications yet</p>;
+  if (error) return <p className="error-message">There has been an error</p>;
+  if (applicationsData.length === 0) return <p>No application found</p>;
 
   return (
     <>

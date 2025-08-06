@@ -7,6 +7,7 @@ import { validatePassword } from "../utils/validators";
 import type { TNewUserDetails } from "../types/userTypes";
 import { UserContext } from "../contexts/userContext";
 import { handleDataEntry } from "../utils/dataEntry";
+import { Box, Button } from "@mui/material";
 
 function Register() {
   const navigate = useNavigate();
@@ -104,9 +105,21 @@ function Register() {
         {serverError?.unknownError && (
           <p>Something has gone wrong, please try again</p>
         )}
-        <button type="submit" className="auth-button">
-          Sign up
-        </button>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              backgroundColor: "var(--accent-color)",
+              color: "black",
+
+              marginTop: "1em",
+            }}
+            size="large"
+          >
+            Sign up
+          </Button>
+        </Box>
         <p>
           Already have an account? <Link to="/login">Log in</Link>
         </p>

@@ -6,6 +6,7 @@ import { loginUser } from "../api";
 import { UserContext } from "../contexts/userContext";
 import { processLoggingInError } from "../utils/errors";
 import { handleDataEntry } from "../utils/dataEntry";
+import { Box, Button } from "@mui/material";
 
 function Login() {
   const [userDetails, setUserDetails] = useState<TUserDetails>({
@@ -60,7 +61,22 @@ function Login() {
         />
         <br />
         {loggingInError?.unknownError && <p>{loggingInError.message}</p>}
-        <button className="auth-button">Log in</button>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              backgroundColor: "var(--accent-color)",
+              color: "black",
+
+              marginTop: "1em",
+            }}
+            size="large"
+          >
+            Log in
+          </Button>
+        </Box>
+
         {loggingInError?.authenticationError && (
           <p className="error-message">{loggingInError.message}</p>
         )}

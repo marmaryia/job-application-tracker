@@ -43,7 +43,7 @@ label{
 input, textarea{
     padding: 1em;
     margin-block: 0.5em;
-    border-radius: 5px;
+    border-radius: 10px;
     width: 100%;
     font-size: large;
 }
