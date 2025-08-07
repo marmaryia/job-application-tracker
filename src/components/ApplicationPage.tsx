@@ -51,8 +51,8 @@ function ApplicationPage() {
   }
 
   return (
-    <section>
-      <h2>You application to {application!.company} </h2>
+    <section className="application-page-main-section">
+      <h2>Application to {application!.company} </h2>
 
       <div className="application-container">
         <EventsTimeline

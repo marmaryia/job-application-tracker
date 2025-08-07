@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import { useContext, useState } from "react";
 import Popup from "reactjs-popup";
 import { deleteApplicationById } from "../api";
@@ -22,21 +22,19 @@ function DeleteButtonAndPopup() {
   }
   return (
     <>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button
-          onClick={() => setPopupOpen(true)}
-          variant="contained"
-          sx={{
-            backgroundColor: "var(--accent-color)",
-            color: "black",
-            marginRight: "1em",
-            marginTop: "1em",
-          }}
-          size="large"
-        >
-          Delete
-        </Button>
-      </Box>
+      <Button
+        type="button"
+        onClick={() => setPopupOpen(true)}
+        variant="outlined"
+        sx={{
+          borderColor: "var(--accent-color)",
+          color: "var(--accent-color)",
+        }}
+        size="large"
+      >
+        Delete
+      </Button>
+
       <Popup open={popupOpen} onClose={() => setPopupOpen(false)}>
         <h3>Deleting your application</h3>
         <p className="popup-text">

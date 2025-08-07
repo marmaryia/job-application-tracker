@@ -52,7 +52,7 @@ function EventsTimeline({
         iconStyle={{
           background: "var(--accent-color)",
           color: "black",
-          marginTop: addingEvent ? "" : "-2em",
+          marginTop: addingEvent ? "" : "-1em",
         }}
         icon={<AddIcon />}
         iconOnClick={() =>
@@ -102,7 +102,7 @@ function EventsTimeline({
                 </Button>
               )}
             </Box>
-            <p>{appEvent.notes}</p>
+            <p className="event-text">{appEvent?.notes?.replace("_", " ")}</p>
           </VerticalTimelineElement>
         );
       })}
