@@ -32,7 +32,7 @@ function ApplicationsList() {
   return (
     <section className="all-applications-section">
       <div className="applications-list-header">
-        <h2>Your applications</h2>
+        <h2>Your Applications</h2>
         <Button
           variant="contained"
           onClick={() => {

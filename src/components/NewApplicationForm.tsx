@@ -66,7 +66,7 @@ function NewApplicationForm({
       <div>
         <h3>Duplicate application</h3>
         <p className="popup-text">
-          You have already applied for a job (jobs) at this URL:
+          You have already applied for a job(s) at this URL:
         </p>
         <ul>
           {duplicateApplications.map(
