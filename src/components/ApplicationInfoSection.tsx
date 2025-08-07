@@ -6,7 +6,8 @@ import { handleDataEntry } from "../utils/dataEntry";
 import { editApplicationById, patchApplicationStatus } from "../api";
 import { UserContext } from "../contexts/userContext";
 import { statuses } from "../assets/statuses";
-import { eventsPreceedDate, formatIsoTimestamp } from "../utils/dates";
+import { eventsPreceedDate } from "../utils/dates";
+import DeleteButtonAndPopup from "./DeleteButtonAndPopup";
 
 const keys: ["company", "position", "date_created", "job_url", "notes"] = [
   "company",
@@ -127,7 +128,7 @@ function ApplicationInfoSection({
           Edit
         </button>
       )}
-
+      <DeleteButtonAndPopup />
       <Popup open={popupOpen}>
         <h3>Date conflict</h3>
         <p>
