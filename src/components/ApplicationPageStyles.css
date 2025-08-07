@@ -6,31 +6,7 @@
 .application-info-container {
     display: grid;
     grid-template-columns: 40% 60%;
-    align-items: center;
-}
-
-.application-info-tag{
-    font-size: 1.5em;
-}
-
-.edit-form-input:disabled{
-    background-color:#FFBC42;
-    color: black
 }
 
 .vertical-timeline--one-column-right .vertical-timeline-element.vertical-timeline-element--right .vertical-timeline-element-content-arrow, .vertical-timeline--one-column-right .vertical-timeline-element:nth-child(even):not(.vertical-timeline-element--left) .vertical-timeline-element-content-arrow {
         top: 16px !important;}
-
-#add-event-icon:hover {cursor: pointer}
-
-.event-text{
-    font-size: 1.25em !important;
-}
-
-.application-page-main-section{
-    min-width: 75%;
-}
-
-.application-info-section{
-    padding: 2em;
-}

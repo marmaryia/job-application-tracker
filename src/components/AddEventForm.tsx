@@ -3,6 +3,7 @@ import { UserContext } from "../contexts/userContext";
 import { useParams } from "react-router-dom";
 import { handleDataEntry } from "../utils/dataEntry";
 import { postNewEvent } from "../api";
+import { Box, Button } from "@mui/material";
 
 function AddEventForm({
   setAddingEvent,
@@ -42,8 +43,8 @@ function AddEventForm({
 
   return (
     <form action="submit" onSubmit={handleSubmit}>
-      <h3 className="vertical-timeline-element-title">New event</h3>
-      <label htmlFor="event-title">Event:</label> <br />
+      <h4 className="vertical-timeline-element-title">New event</h4>
+      <label htmlFor="event-title">Title *</label> <br />
       <input
         required
         type="text"
@@ -52,15 +53,15 @@ function AddEventForm({
         value={eventData.title}
       />
       <br />
-      <label htmlFor="event-notes">Notes:</label> <br />
-      <input
-        type="text"
+      <label htmlFor="event-notes">Notes</label> <br />
+      <textarea
+        rows={2}
         id="event-notes"
         onChange={(e) => handleDataEntry("notes", e.target.value, setEventData)}
         value={eventData.notes}
       />
       <br />
-      <label htmlFor="event-date">Date:</label> <br />
+      <label htmlFor="event-date">Date *</label> <br />
       <input
         required
         type="date"
@@ -74,7 +75,34 @@ function AddEventForm({
       />
       <br />
       {error[0] && <p>{error[1]}</p>}
-      <button type="submit">Save</button>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          type="button"
+          variant="outlined"
+          onClick={() => {
+            setAddingEvent(false);
+          }}
+          sx={{
+            color: "var(--background-color-primary)",
+            borderColor: "var(--background-color-primary)",
+            marginTop: "1em",
+            marginRight: "1em",
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{
+            backgroundColor: "var(--background-color-primary)",
+            color: "var(--text-color-primary)",
+            marginTop: "1em",
+          }}
+        >
+          Save
+        </Button>
+      </Box>
     </form>
   );
 }

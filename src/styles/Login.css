@@ -8,7 +8,7 @@
 
 .error-message{
     font-style: italic;
-    border: 3px solid #A52422;
+    border: 3px solid var(--accent-color-secondary);
     border-radius: 5px;
     padding: 0.5em;
 }
