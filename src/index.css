@@ -8,7 +8,8 @@
 
   --background-color-primary: #203162;
   --text-color-primary: #abd7ff;
-  --accent-color: #FFBC42
+  --accent-color: #FFBC42;
+  --accent-color-secondary: #A52422;
 }
 
 #root{

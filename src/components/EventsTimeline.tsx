@@ -8,8 +8,11 @@ import { formatIsoTimestamp } from "../utils/dates";
 import { deleteEventById } from "../api";
 import { UserContext } from "../contexts/userContext";
 import { useContext, useState } from "react";
-import AddEventButton from "./AddEventButton";
+import EventIcon from "@mui/icons-material/Event";
 import AddEventForm from "./AddEventForm";
+import AddIcon from "@mui/icons-material/Add";
+import { Box, Button } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 
 function EventsTimeline({
   events,
@@ -29,42 +32,34 @@ function EventsTimeline({
       console.log(error);
     }
   }
+  const reversedEvents = [...events].reverse();
 
   return (
     <VerticalTimeline layout={"1-column-right"}>
-      {events.map((appEvent) => {
-        return (
-          <VerticalTimelineElement
-            key={appEvent.event_id}
-            className="vertical-timeline-element--work"
-            contentStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}
-            contentArrowStyle={{ borderRight: "7px solid  rgb(33, 150, 243)" }}
-            date={formatIsoTimestamp(appEvent.date, true)}
-            iconStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}
-          >
-            {!appEvent.undeletable && (
-              <button onClick={() => deleteEvent(appEvent.event_id)}>
-                Delete
-              </button>
-            )}
-            <h3 className="vertical-timeline-element-title">
-              {appEvent.title}
-            </h3>
-            <p>{appEvent.notes}</p>
-          </VerticalTimelineElement>
-        );
-      })}
-
       <VerticalTimelineElement
         className="vertical-timeline-element--work"
+        id="add-event-icon"
         contentStyle={
           addingEvent
-            ? { background: "rgb(33, 150, 243)", color: "#fff" }
+            ? {
+                background: "var(--accent-color)",
+                color: "black",
+                padding: "2em",
+                borderRadius: "20px",
+              }
             : { display: "none" }
         }
-        contentArrowStyle={{ borderRight: "7px solid  rgb(33, 150, 243)" }}
-        iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
-        icon={<AddEventButton setAddingEvent={setAddingEvent} />}
+        iconStyle={{
+          background: "var(--accent-color)",
+          color: "black",
+          marginTop: addingEvent ? "" : "-2em",
+        }}
+        icon={<AddIcon />}
+        iconOnClick={() =>
+          setAddingEvent((current: boolean) => {
+            return !current;
+          })
+        }
         visible={true}
       >
         {addingEvent && (
@@ -74,6 +69,43 @@ function EventsTimeline({
           />
         )}
       </VerticalTimelineElement>
+      {reversedEvents.map((appEvent) => {
+        return (
+          <VerticalTimelineElement
+            key={appEvent.event_id}
+            className="vertical-timeline-element--work"
+            contentStyle={{
+              background: "var(--accent-color)",
+              color: "black",
+              padding: "2em",
+              borderRadius: "20px",
+            }}
+            date={formatIsoTimestamp(appEvent.date, true)}
+            iconStyle={{
+              background: "var(--background-color-primary)",
+              color: "#fff",
+            }}
+            icon={<EventIcon />}
+          >
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <h4 className="vertical-timeline-element-title">
+                {appEvent.title}
+              </h4>
+              {!appEvent.undeletable && (
+                <Button
+                  onClick={() => deleteEvent(appEvent.event_id)}
+                  variant="text"
+                  sx={{ color: "black" }}
+                  size="small"
+                >
+                  <ClearIcon />
+                </Button>
+              )}
+            </Box>
+            <p>{appEvent.notes}</p>
+          </VerticalTimelineElement>
+        );
+      })}
     </VerticalTimeline>
   );
 }

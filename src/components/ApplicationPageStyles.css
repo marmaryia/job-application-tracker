@@ -10,5 +10,3 @@
 
 .vertical-timeline--one-column-right .vertical-timeline-element.vertical-timeline-element--right .vertical-timeline-element-content-arrow, .vertical-timeline--one-column-right .vertical-timeline-element:nth-child(even):not(.vertical-timeline-element--left) .vertical-timeline-element-content-arrow {
         top: 16px !important;}
-
-#add-event-icon:hover {cursor: pointer}
