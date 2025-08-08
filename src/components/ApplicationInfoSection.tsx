@@ -63,6 +63,7 @@ function ApplicationInfoSection({
       );
 
       setApplication(updatedStatusApplication);
+      setUpdatedApplication(updatedStatusApplication);
     } catch {
       setError(true);
     }

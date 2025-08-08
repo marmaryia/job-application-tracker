@@ -74,7 +74,7 @@ function AddEventForm({
         }}
       />
       <br />
-      {error[0] && <p>{error[1]}</p>}
+      {error[0] && <p className="error-message">{error[1]}</p>}
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
           type="button"
